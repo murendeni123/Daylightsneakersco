@@ -390,12 +390,16 @@ app.post('/api/orders', (req, res) => {
     `• ${i.brand} ${i.model} — ${i.colorway}\n  UK ${i.uk_size} ×${i.quantity}  R${i.price_at_time.toLocaleString()}`
   ).join('\n');
 
+  const addr = [address, city, postcode].filter(Boolean).join(', ');
   const waMsg = encodeURIComponent(
     `Hi Daylight! I'd like to order:\n\n${lines}\n\n` +
     `Subtotal: R${subtotal.toLocaleString()}\n` +
     `Delivery: Free\n` +
     `Total: R${total.toLocaleString()}\n\n` +
-    `${name} · ${phone}\nRef: ${ref}`
+    `Name: ${name}\nPhone: ${phone}\n` +
+    (addr ? `Address: ${addr}\n` : '') +
+    (note ? `Note: ${note}\n` : '') +
+    `Ref: ${ref}`
   );
 
   const waUrl = `https://wa.me/${WA}?text=${waMsg}`;

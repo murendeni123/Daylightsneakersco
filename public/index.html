@@ -299,9 +299,6 @@ let STATE = {
   orderRef: null,
   orderData: null,
   waUrl: null,
-  trackRef: '',
-  trackResult: null,
-  trackNote: 'Use the reference from your confirmation, or ask in the chat and we will find it.',
 };
 
 function go(view, extra) {
@@ -392,6 +389,7 @@ function addToBag() {
   else bag.push({ id, size: STATE.size, qty: 1 });
   STATE.bag = bag;
   STATE.bagOpen = true;
+  saveBag();
   const p = STATE.productDetail || STATE.products.find(x => x.id === id);
   flash(`${p.model} UK ${STATE.size} added`);
   render();
@@ -403,11 +401,13 @@ function qtyChange(ix, d) {
   if (next < 1) bag.splice(ix, 1);
   else bag[ix] = { ...bag[ix], qty: next };
   STATE.bag = bag;
+  saveBag();
   render();
 }
 
 function removeBag(ix) {
   STATE.bag.splice(ix, 1);
+  saveBag();
   render();
 }
 
@@ -422,19 +422,31 @@ async function openProduct(id) {
   updateHash();
 }
 
+function saveBag() {
+  try { localStorage.setItem('daylight_bag', JSON.stringify(STATE.bag)); } catch(e) {}
+}
+function loadBag() {
+  try { const b = localStorage.getItem('daylight_bag'); if (b) STATE.bag = JSON.parse(b); } catch(e) {}
+}
+
 async function placeOrder() {
   ['name','phone','address','city','postcode','note'].forEach(k => {
     const el = document.getElementById('field-' + k);
-    if (el) STATE.form[k] = el.value;
+    if (el) STATE.form[k] = el.value.trim();
   });
   const f = STATE.form;
   const errors = {};
-  if (!f.name.trim()) errors.name = 'We need a name for the courier';
-  if (!/[0-9]{9,}/.test(f.phone.replace(/\D/g, ''))) errors.phone = 'A working mobile number, please';
-  if (!f.address.trim()) errors.address = 'Street address is required';
-  if (!f.city.trim()) errors.city = 'Which city?';
+  if (!f.name) errors.name = 'We need a name for the courier';
+  if (!/[0-9]{9,}/.test((f.phone || '').replace(/\D/g, ''))) errors.phone = 'A working mobile number, please';
+  if (!f.address) errors.address = 'Street address is required';
+  if (!f.city) errors.city = 'Which city?';
   STATE.errors = errors;
-  if (Object.keys(errors).length) { flash('A few details are missing'); render(); return; }
+  if (Object.keys(errors).length) {
+    render();
+    const firstErr = document.querySelector('input.err');
+    if (firstErr) firstErr.focus();
+    return;
+  }
 
   const items = STATE.bag.map(i => ({ productId: i.id, size: i.size, qty: i.qty }));
   try {
@@ -452,21 +464,10 @@ async function placeOrder() {
 
     STATE.orderRef = data.ref;
     STATE.orderData = data;
-    STATE.trackRef = data.ref;
-
-    if (STATE.payment === 'card' && STATE.config.stripeEnabled) {
-      const sRes = await fetch('/api/checkout/stripe', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ orderRef: data.ref })
-      });
-      const sData = await sRes.json();
-      if (sData.url) { window.location.href = sData.url; return; }
-    }
-
     STATE.waUrl = data.waUrl;
     STATE.bag = [];
     saveBag();
+
     if (data.waUrl) {
       window.location.href = data.waUrl;
     } else {
@@ -844,8 +845,8 @@ function renderCheckout() {
           <div class="summary-row"><span class="label">${s.delivery === 'collect' ? 'Collection' : 'Courier'}</span><span class="value">${del ? R(del) : 'Free'}</span></div>
           <div class="summary-total"><span>Total</span><span>${R(total)}</span></div>
         </div>
-        <button class="btn-full" onclick="placeOrder()">${s.payment === 'card' ? 'Pay ' + R(total) : 'Place order — ' + R(total)}</button>
-        <p style="margin:12px 0 0;font-size:13px;line-height:1.5;color:#8B8983">Your order is saved with a reference number before anything opens, so nothing gets lost if the chat drops.</p>
+        <button class="btn-full" style="background:#25D366;font-size:16px" onclick="placeOrder()">Place order on WhatsApp — ${R(total)}</button>
+        <p style="margin:12px 0 0;font-size:13px;line-height:1.5;color:#8B8983">Sends your order details to us on WhatsApp — just tap send.</p>
       </div>
     </div>
   </div>`;
@@ -1045,7 +1046,6 @@ function handleHash() {
   else if (hash.startsWith('confirm/')) {
     const ref = hash.split('/')[1];
     STATE.orderRef = ref;
-    STATE.trackRef = ref;
     go('confirm');
   }
   else if (hash === 'help') go('help');
@@ -1053,6 +1053,7 @@ function handleHash() {
 
 // Boot
 (async () => {
+  loadBag();
   await Promise.all([loadProducts(), loadConfig()]);
   if (location.hash && location.hash !== '#') {
     handleHash();
