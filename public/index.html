@@ -297,6 +297,7 @@ let STATE = {
   errors: {},
   orderRef: null,
   orderData: null,
+  waUrl: null,
   trackRef: '',
   trackResult: null,
   trackNote: 'Use the reference from your confirmation, or ask in the chat and we will find it.',
@@ -459,11 +460,8 @@ async function placeOrder() {
       if (sData.url) { window.location.href = sData.url; return; }
     }
 
+    STATE.waUrl = data.waUrl;
     go('confirm', { orderRef: data.ref });
-
-    if (STATE.payment !== 'card') {
-      setTimeout(() => { window.open(data.waUrl, '_blank'); }, 500);
-    }
   } catch (err) {
     flash('Network error — try again');
   }
@@ -885,15 +883,19 @@ function renderConfirm() {
   const addressBlock = [f.name, f.address, f.city, f.postcode].filter(Boolean).join('\n') || '—';
 
   const msg = waMessage();
+  const orderWaUrl = s.waUrl || `https://wa.me/27659662508?text=${encodeURIComponent(msg)}`;
 
   return `<div class="confirm-grid">
     <div>
       <div class="confirm-badge">Order saved</div>
       <h1 class="confirm-title">Thanks, ${(f.name.trim().split(' ')[0]) || 'friend'}.<br>We are on it.</h1>
-      <p class="confirm-body">Your reference is <b>${s.orderRef}</b>. ${confirmLine} A person replies from the shop, usually within the hour — no bots.</p>
+      <p class="confirm-body">Your reference is <b>${s.orderRef}</b>. Tap the button below to send your order to us on WhatsApp — the message is already written, just hit send.</p>
 
-      <div style="margin-top:24px;background:#F7F7F5;border:1.5px solid #EDEDED;padding:18px">
-        <div style="font-size:16px;font-weight:800;margin-bottom:12px">Pay here</div>
+      <a class="btn-full" style="display:block;text-align:center;margin-top:24px;background:#25D366;font-size:17px;padding:20px" href="${orderWaUrl}" target="_blank">Send order on WhatsApp</a>
+      <p style="margin:10px 0 0;font-size:13px;color:#8B8983;text-align:center">Opens WhatsApp with your order pre-filled. Just tap send.</p>
+
+      <div style="margin-top:28px;background:#F7F7F5;border:1.5px solid #EDEDED;padding:18px">
+        <div style="font-size:16px;font-weight:800;margin-bottom:12px">Then pay here</div>
         <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;font-size:14px">
           <span style="color:#6E6C66">Bank</span><span style="font-weight:700">Capitec</span>
           <span style="color:#6E6C66">Account name</span><span style="font-weight:700">Daylight Sneaker Co.</span>
@@ -906,10 +908,10 @@ function renderConfirm() {
           Once your proof of payment is sent, we wait for the money to reflect in our account before we dispatch your order.
         </div>
         <div style="margin-top:16px;padding-top:14px;border-top:1px solid #EDEDED;font-size:14px;line-height:1.7;color:#54524D">
-          <b style="color:#E01E00">Important:</b><br>
+          <b style="color:#E01E00">Steps:</b><br>
           1. Use <b style="color:#0E0E0E">${s.orderRef}</b> as your payment reference<br>
           2. Screenshot your proof of payment<br>
-          3. Send it to us on WhatsApp with your order number
+          3. Send it to us on WhatsApp
         </div>
         <a class="btn-lime" style="display:block;text-align:center;margin-top:14px" href="https://wa.me/27659662508?text=${encodeURIComponent('Hi Daylight! Here is my proof of payment for order ' + s.orderRef + '. [Attach POP screenshot]')}" target="_blank">Send proof of payment on WhatsApp</a>
       </div>
