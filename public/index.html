@@ -128,7 +128,8 @@ img{display:block;max-width:100%}
 .form-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:14px}
 .form-label{display:block}
 .form-label span{display:block;font-size:14px;font-weight:600;margin-bottom:6px}
-.form-label input{width:100%;border:1.5px solid #DEDEDE;padding:14px;font-size:15px;outline:none;background:#fff}
+.form-label input{width:100%;border:1.5px solid #DEDEDE;padding:14px;font-size:15px;outline:none;background:#fff;color:#0E0E0E}
+.form-label input::placeholder{color:#C0C0C0;font-style:italic}
 .form-label input.err{border-color:#E01E00}
 .form-label .error{display:block;font-size:13px;color:#E01E00;margin-top:5px;min-height:18px}
 .span-2{grid-column:span 2}
@@ -423,6 +424,10 @@ async function openProduct(id) {
 }
 
 async function placeOrder() {
+  ['name','phone','address','city','postcode','note'].forEach(k => {
+    const el = document.getElementById('field-' + k);
+    if (el) STATE.form[k] = el.value;
+  });
   const f = STATE.form;
   const errors = {};
   if (!f.name.trim()) errors.name = 'We need a name for the courier';
@@ -789,7 +794,7 @@ function renderCheckout() {
   const field = (key, label, placeholder, span, tabIdx) => `<label class="form-label${span === 2 ? ' span-2' : ''}">
     <span>${label}</span>
     <input class="${e[key] ? 'err' : ''}" value="${f[key]}" placeholder="${placeholder}" tabindex="${tabIdx}"
-      oninput="STATE.form.${key}=this.value;STATE.errors.${key}=''" id="field-${key}">
+      oninput="STATE.form.${key}=this.value;STATE.errors.${key}='';this.classList.remove('err');this.nextElementSibling.textContent=''" id="field-${key}">
     <span class="error">${e[key] || ''}</span>
   </label>`;
 
@@ -803,12 +808,12 @@ function renderCheckout() {
     <div>
       <div class="form-section">Where it goes</div>
       <div class="form-grid">
-        ${field('name', 'Full name', 'Thandi Mokoena', 1, 1)}
-        ${field('phone', 'Mobile number', '065 966 2508', 1, 2)}
-        ${field('address', 'Street address', '12 Juta Street, Braamfontein', 2, 3)}
-        ${field('city', 'City', 'Johannesburg', 1, 4)}
-        ${field('postcode', 'Postal code', '2000', 1, 5)}
-        ${field('note', 'Anything we should know?', 'Buzzer is broken, call on arrival', 2, 6)}
+        ${field('name', 'Full name', 'e.g. Thandi Mokoena', 1, 1)}
+        ${field('phone', 'Mobile number', 'e.g. 065 966 2508', 1, 2)}
+        ${field('address', 'Street address', 'e.g. 12 Juta Street, Braamfontein', 2, 3)}
+        ${field('city', 'City', 'e.g. Johannesburg', 1, 4)}
+        ${field('postcode', 'Postal code', 'e.g. 2000', 1, 5)}
+        ${field('note', 'Anything we should know?', 'e.g. Buzzer is broken, call on arrival', 2, 6)}
       </div>
 
       <div class="form-section" style="margin-top:30px">How it gets there</div>
