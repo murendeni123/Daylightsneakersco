@@ -461,7 +461,13 @@ async function placeOrder() {
     }
 
     STATE.waUrl = data.waUrl;
-    go('confirm', { orderRef: data.ref });
+    STATE.bag = [];
+    saveBag();
+    if (data.waUrl) {
+      window.location.href = data.waUrl;
+    } else {
+      go('confirm', { orderRef: data.ref });
+    }
   } catch (err) {
     flash('Network error — try again');
   }
