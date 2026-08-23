@@ -1,0 +1,830 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:ital,wdth,wght@0,62..125,100..900&family=Archivo+Black&display=swap">
+<style>
+  body{margin:0;background:#fff;-webkit-font-smoothing:antialiased}
+  a{color:inherit;text-decoration:none;cursor:pointer}
+  a:hover{color:#0E0E0E}
+  input,select,button{font:inherit;color:inherit}
+  ::selection{background:#E6FF00;color:#0E0E0E}
+</style>
+</helmet>
+
+<div style="width:1440px;margin:0 auto;background:#fff;color:#0E0E0E;font-family:Archivo,sans-serif;position:relative;overflow:hidden">
+
+  <div style="background:#F5F5F5;display:flex;justify-content:space-between;align-items:center;padding:8px 40px;font-size:13px;color:#4A4A48;font-weight:500">
+    <div style="display:flex;gap:20px"><a onClick="{{ goHelp }}">Delivery &amp; returns</a><a onClick="{{ goTrack }}">Track my order</a><a onClick="{{ goHelp }}">Join Daylight</a></div>
+    <div style="display:flex;gap:20px"><span>South Africa</span><span>Talk to us on WhatsApp</span></div>
+  </div>
+
+  <div style="display:flex;align-items:center;gap:36px;padding:0 40px;height:66px;border-bottom:1px solid #EDEDED;position:sticky;top:0;background:#fff;z-index:40">
+    <a onClick="{{ goHome }}" style="display:flex;align-items:center;flex:none"><img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAARIAAADwCAMAAAD7EhssAAAAIGNIUk0AAHomAACAhAAA+gAAAIDoAAB1MAAA6mAAADqYAAAXcJy6UTwAAAD8UExURf///yMjJhgZHjUzMxMVGyUlKSkoKxMUGg4QFw8RGEhGRBYXHQwOFR8fIxETGR8gJBwcITAvMDs3MTIxMikoKhkaHyIiJicnKSUlKEA/PS0sLjs5NxscIaB5RZNzRLOJUaiBTLuRVruNUceXWM6hZMyeYb6RVbWHTK6BSYRgMjYwKXFXNaF6RdCeXtKkZsCOUKd6RJ10QYxmN9etc3ZaOGtjW9GgXnZgQkVAPTMwMLGAR7WITUtEP8WbYDo3OKt/Rjw5OEtHRU9HP0E9OisnJUI+PJZuO51yPlhSTmdhWk5LSIR8dHZvaJGJgYqCeTEuKysrLpVsO6J1Po1oOeTJ63oAAAABdFJOUwBA5thmAAAAAWJLR0QAiAUdSAAAAAd0SU1FB+oIFg07LU+88dgAACD0SURBVHja7V0LQ9rKto5JzCQEQtI2EIKIPBTcWwVprdLTi9LeqnvX3XPs+f//5a41j2TyQMVWHl5WqwYIgfmy3rNmjaJsaEMb2tCGNrShDW1oQxva0IY2tKENbWhDC6UtRdV0ddnfYqVo2yDENE1iWttqQd1gQ0m3TbMIZJc0p+wSYluOp/1/BefN23cIiWcT1ywCLCajYtFFzgHGsf2Ko/9/EquqZwQweIoH/R8RBSZ6AuUK0HH01886VYNEfJGk/OeKyDkgV/4rZpxaGMwFSXSI4BDbeZ3IqITe/RwIZHySjxMvWb7z6oCxTSYUsyFhf1wyGzPkmGWP4zeS+hAc8bCJ4JUsQ9EnAJfXwy6gFR7HxCQxABlIJHZ5DbB4Hvggj3PJQ2glMDJNf91R8YxfA4TanwTHIK8se1S/RtovMkmaYxhZ680q9eC3YsJ93zUHZbaBzVMXT0VnjUFRvSAgxTxTLNmS1N+ngbK+OsWwrFmO/Zxck3Z0yboySknRwTdBPletHD5JRDePYBUkTDpA5y97cM8jxMJ06aGeuukVfFnVS75vPRAJxa+YpusmTZi97NE9FxLF8tihmRxqMnRRqyXHt0iOSy9zEmUUM+KxtRUezuBpSLwZIOqOTfOTDAoz7cEm4+U1xcTJh6Ty4JtUfdsw3MdM+DpigtKxkwdJ0Qyf8Ha15KMCMWfbZnPZI3wWJIJLUoMpP/kaoUFmO3TWsof4HCrlQvIkLhGk7tivChP91yHBq1SsGZisoSMrrO2vjqTk54ECFmn9VKz4xsmRFHfmvtCOnyM+mC5Y9gh/HRLqZhW3578SISSXTdYuYS0gkbxQPHxGiFLWrdyZIVJY9hh/GZLnWoodCCJzw6F1i3a4EVZSTP8MLgEBqRAzx0kxS/NfbBUgMX8ZkjeAiqV4JMso7rIH+TxKDWNOvwSpgLEPxJE5Ez5rp2HTkOCQ5jfCSg0g2VJwZjUjOutniJGIhIj5LKcT7XYdflQ7a4rXz19LQFJ8JiQVDolSyvona5l2lCEBUJ4hOKoiTLqbZZNlD+85lJL/Z0AiYAHDk/VN1lFyUsz+DIdeoiybrKPkmL8Tku2MIV5HyfmdggNXy0CyhpKTyr0+1eI0Gg0ZEeGTZQPANXPq05CAyXlYcBq7zb1Wq9XudLudTmf/oHfQbzV3G4fbAhInA8kaKpPUEGZyyR9/HjUP9jvH3X2gk/0TwGSfwtLpDHrD0xFjGj0DyRo6sE+DpAHc0emcvD/pnnS7+ycnx11KgE4HCf8cNBt5kKyhfn0KJI2jZqv7/gTQQFC6JycnnQ5D5IRB0qHY9JoNLZshWPYAfxmSHIvTaDZb70/evwcGOUECLACSYzzYZ/+RuscgVIMPrxCSrHptNVv77wEShgX8fd89xuF3ERT4vw+QoFrZPwY6K74+SNKCc4TKo/seqMt4BNkExt7tfqQIARbHQnBAmj5kIVk/x4Q8BEnjvAcSg1JzwsTm40dE5OPxMaoUFJpuhwpOd/+YqpRXAclDXNLYbXUQkvecO05OqM3hCmWfMgqY4y61OAO0yq8Ckge4BPRql3IIKhBgji6TGvYH2AKYg0FzzMQGQLl4DbrkAUia5533VGTYb8YmVGIQkg6qWBQe0CxUbA4GnYPxq4PElGOcP5XWewFJpFkBhI8UHa5UwZ/tgLIFG9QZDAa9bJExWfYAfx8kjebRrgzGCSJB4aDSAkwB1DsA1gAFe3KMmBwcnJLXAEliiYBUo9lsASKgSrpcu1IbDFAMOq3mJxYGQzTcODof7fXb1BIPBqhd077auk35KThNLq/8jLjkcO9frffch3/fpfoDXfhOs5FzjcbotNdutw9yVEnRWPYA56fk6thIvTY6yB6gPFlQQ52z4/anmZdpjPq9fkZu4NIXfy57hHPTDIvT2G+h7d3fB/edOWTH+62Hr9QYfc6YG9M8/Z/DZQ9xXpoxJ3zEfA4uMdToth69VmZuyyySg5PH37diNAOSJsXhhEY2lE/2u415r4U06XQ7l8se43yULgUWgtMCl+MYIaFccowe2aPXcrJ+GvmA8XFz2aOci6ozIGkeDI4pHEx8IPIfPHqtnJK1oDdoDboHyx7lXFQgiZsareZs/KvfOQGtuv/xIyjWE4Ck85jg+FmxKX7ufGw1PrXWSsPWpMoBWy4HOeqBtHSOARBUJQjJ0cNXUnM0iXk+6DzOXStGjEuok0YZpKB9vmI9Ohr7mCvqdNEjoZFu62E2ySuU9pXd1mjZQ5yXqhwSbmm8z9NpuFWimJwDa3SBT45p2giiuwcxyVt9gVFw89PjX2K1qEoBsbkKUbe0q9Db2qrSRy3kkQ6ajBP8A4xyOQsUNbduHHH+9LjtXjGqokNPp5/efKFj0zStpHkUosPOx26XRv4fMdKloBzsnSfnPil5uSt0aKqksXaQ1AmfkPv6xaO8AYyiaS6zxa0uQvIRRecjBYRRu9ffax5JQ7XNYl4xML3I2iFCW3coyCL1LV2jvKGWNM2xuYalLIJ5Myo8KWpdUhaoErOYBwmb+lxLSEDi1Staf7fFngL16rCV4cNO5yPVJqBlP8ZYHNOMUee4Mxj0cTK4+r85fQx4IfBaQuIoqSS6ulX3Szo6KdVGEzNmHaZkJdkZMM0CmPR6/ZFyeP6tnEaFdzZZR0iyTVlU1QtRwdIXml3MOzMWOcYkPP4FIHr9/oBBctDDyoHdP7wEKGtYRPEQTFuhx/QKFm+2EJLjiDsoh3Q+dga9vb3R9V6vDf8Qn+Fo989vY8I16zrWUORSQaP1q6q+JTinBp49aFZJtQ6AuNS0+/3r5uh62Ov3KCo3e6OvFeb6rWESOo+0KVC6hl6l8+R03nfAARkMYo1yMOhfj0bXPYrKsN/fO/8Du+is7YLyxNC96XRs28bnb5mXmq3zUVvmkU6MChyBlzIc3tz0kU/6cHx9brwGRGrhdDIOiF0sjqfVzKujvdHl3oDzxaCTZBTEBMD4V59jAr9OP7xb9oDmBiD1WLu4oOugtxXHJJO8WYajy1aPAUB/YkQoPlRsQMEy8QFc+qM4QbJ+Dr2ifp1Mxq47oXM4jmkGF/nnNRmDCNlhaNAHaHHabYYHHqNWuY6mKtYCEU+Lj2ufp5MA/AlzLLqbkosZzSmUpuCLhFppIyZtKj0UGIZLu3e+7GHOQ2+jo/qUA1IsuoHJ+7yOZ87PtUBGqOFBl23QbjPzAwdtwR0RwZnXa8EfSapPbycu6wEGzBHg0cOtOhqXLVAr/QHjEQQCJactxAWh6XNI2oODdnttEvOcSd6B0Q1ETzQQmACXcD5mPOmNH/WRMRAYMM0MD3jYZj8CHKwoOOivCaMwTfIFOaRI4uZO7tgNHp3mZwUDvYYyaqMiaR8cIAbAKOC0HbQPkGu4CLVZqcV6JF4RkvrZ7e0FqBG3UsYm2tQHn2DH4HH9CVeAcR72m60+MzEDkBHgCxAU5A2mW+AJBAtQWQvhKQCLnN2e/fV3TdNrhZLn8QkYd0JMdzz2Hr8CEx8EZoRD50JDGQMIhQeePeAitRbCU7s9O/t+p7x5p7wt1P6o1zwuO9Oz8WS89YQL0EGyQpPRZaPZY6q2h9JDmYQyj9C664DJt9vJ9J9//n6n1d/WNa1eq1k0nHcn4KLkskh48TXZUIGO8UgcHu5e9plOPQDlMqAMw3w3plYGvVXHJLwNyO0/P5Q3oDWq8FPYoX2epmfTsTHL4OT1o5dxOWwxhuj0mBAxDUsjHmqPV9ypHwcXt3c//mIrewvKHxo2ZCHTs0kw3xq2RvRLOToatY5GfTQ9lDkYJBAVcy+l3Rut9KRwML3758eXwpu/61/eKIV6XcOEzyQGxPv26CUayV+KsneIB6PIT2MeG/8zAGnqnR89etWlkRrcom4tvNEwIK4XakYwAa8+yhypV9qj1zhKQyLimfMhB6XPg2Pu3Hc6/dHqyo5jutOz71/eagVUmW/+/uvu7nYiKxGGiFqvV2deQ0YjxogS45ThsDdESOgvLkqr67SBeXGnd1/eAiLVuvbmr3/uPgfZlhqad3VVe/pFJakAV4Xq1eEQcelF+YL2aGUrG4k5nkw0pVB4+++39S9nP86meR1LVFWj9th7Gi4JRTEaDoXcMOFhmPRXNlswOfv+469/a5r2n39//evHjzPZFUnYWhUEq6o9rlgykCh/jIYoKf0+YIO8grYHLNGqahPt7O779+93QGe3d//8c/ZZQiRMO/OqupUAaWacnDInh+c37R4VnSFyDEKD5mdFLXF4Ad782Rlicvf9xw9JarwgCEjKNVFnq9iEet1Nv3iOrMEgoXMZfVQpw9XUsIZhTKa3FBbA5WwintfAM8FJKRJ6uuNEG+Gos3FpzDimdHiPYsO4pI+Q9IeoVVZRdApuMA6vJp8/Tykut9wt0y4mAe2zQQjve4W1jTjzAD9bXnoWPXPZrESc31M4BCp95JbV1LCFP8YkGF9cjcfjCwBl+lWhczhTTCdhspG2p+ddoFnDG9AnTMUW5uulN2IMwiFh5nhFJUep2yYJJhcQ9o4nV1chHFxgRpoEbhC4vOW6z4JjxAQQ4Vml+aarjhgcP4exlu0P95Y9+Fmk+gRRGV9dXE0vxoCDSdzJ2d2Fa/JpfxOdXNF4Uq3Sahyl/p/5PiUyOQITkJ32sof+AO2wrdlY6tWcgqadBlL/SpX2UwBUqJoFpQL29yEPJc+67qUgAVDa7VVUJhGpFTdg6cXp7d33s0mihAi5g/aYILx8DeihBORuznMjpl1P4Z+gVQ50GNVt4JHgDjkkVaNJgx7anYUVnKGThipllp8yAxJw0k5vTrnhQYdtlby1WXn3LZ/cno0zRavMzLJW/D5vm7a1VVWZ//q0Solrxhk3CdE5X52Sgge8UC20or0XkpDwLmnEp0yjUkIYBb66ZTuzdcz9MDI5ePjz5/Bnb30milVs6ytBIurMbGGBxIyXKnmzdaahrUp+t87D+5g5bpBVbu5veu1VdF9nw1KKml1FlXe62L8iUZ2oYsKgqqhsZxQyY0e2//5kevUnlZyb09P7m5/DlfToH4ZFd3x520ZVQKInwuCtuuZV36nIWCwAMImVrhQ9BDlBzXrDlcnp8P7+Z7+/Otp1Fj2m7MQeOAygCJIQk5DIQmwX4iLBDS4IbigbvfP6nkoL4xQ8uv95c3/aX/aAHyctCB9Mm3FI0p1vMCBUbbovDkBRRDyI2CTGpfvJno/u7xEIEBcg+ms4vL5edbcEiZiuMdsH40vT8pqy6MAcZRdX8rAtgyAmoIF0EffYxfPrI8Tk9P4UsLln+Ax/PmUOftm0Q4ttxjMMqZMt/eYqxeG7VEdREcJCSNnfibccHt0AIvegQ05v8AcVy7KHm6Gc6F5lRoPkCxAfsGRleeZRZ4U6xLL8sOI7zo5X8jxNq9drtbrniZn2e06np1Rwrm9WT27yRm3xuqxiDip+VpOo4l3R8kikau3du7qmff2GKZiLiOXO75nQ3COvnA5H/Ty/f6lUyBMPh+5qyoQAUKknX6LOaxoRT1G5Ya7WVXULCDjEu5reTuH/ZzkFFyFyCo7JaHS/ejM5eZCobNtxoRSIa4SM73UR+KSd0+rXd+CloX5Rq1uqWqWoaF74LfS0rWQS/8P98IYKDmIyGq2gN5/bdR8XAYAhNaW+LsSVlhtlF5GILFs0ejUKf5Kkux8YJCA4w+vR6mkSpTbJe9bDrIk7c9OsvP0GcMms+kg4rDsAs/v5lMnN/fB0dL96nmvBCL5qOUZnSqg/kd3b0szz0p5AukN1NjFC7duHa25yzq9XUGw8QlywKpm7+2UKQuMyz5w7GXGuYK61V6oWlm2auXQDw9Nwd6ULpl5vRv9dQbFRQr4XsoUetwzM3VlgBrfT8WQ6GbvSNu0z/NYZcOg7PkUDcDcmF2PbdgFnf+sDheTD+fWyh59HmktMM17iDNj4bFLvr7uz6fTsx/e7Hz9ugyCRYnvakkUVRYXCERjb4XiMcyBFYlC/ZRcAuR6dX6+e/VWQS2hoBo53MA4CnLMhFCEL7ut4MrmlE8W3kwtX0iaPgqE6vsUmB8vG2NOuDJskcwW74Jqcfxj9sezR55IRaQk3CC6+fQNP4svVGGRFRLGoa8Zu4MYGefbuNipyBk9QumXDMELPCNgSBUuXpe38/ufo/L9zfVG19LQKjl8nX7azrgs6xfc9z/v6FX5dXQG7AzaEJDRstixY1UsABeHTxsQuj8ceRYOweWQ9rXzu70dPtTXg+NVLql623cAP5yiBej4l91JmIT0gQwzbdwCVEMD59u2KyhSJ9A2IlW0BBrZtW5IaIiSowDt2vErgikyJ5eTo4tH9KDlPMUNfa0Zgw0X5IgezGCwkk7+dQsQ02dABAeQPHKjtV0LKOMg08DxPI3KCRy5lC28yMYyy5ZIYoyx7IP05At2aUCM6ycnO1DxDNHLgS2HIM7a3egaFJNUUgG/YDqzi0oVbxMVj5AzLqIB20AAdzxiHYUhVxeTKC8cVYxyULbF1oSi7yNU5qvbhw/l5Uq8GGXe47gVsH2/+ZVhCN1zMjn/b0i2XpEf8Rn8tQJ8NcCE0NCaBa9nIGeBjEJsqmmxDDuLMEAW15P07zf208Uu85KfmhbbU5yPaz5osqtNlQdUxVxTIiIhRCtGAf3DPXL7hNvVos3u2S/Gh82RXjpIZ+zoq6OTYXTZjSMi8F/018kgd3BO7jMONmYR6K8AfFA3QcS5B+0EEJ5P0zo0MMOLo8371srDsui9kRYYE8QgWpEUiwtl/1dbqnmmrvqnrluP5xEALA56b6wYTEBP4A7qFjCf0KRAmjogwBlQLO0/fj086kwlp1Ys0UcQdLBIA0VQXvtGf2CjM0hQtUbyoaiBXmub4FQPt8GQ8weo18Ong0OWpZptGAHOyhh9vernDdjO3E5E2PQiIpesYpS+hw4eA5ImxC82ZqfOiIJHuw4CFsowdm7Thi7zVRWwvNGM0L7lJds2LmF+lIsI9EdVMmhaBiC7JVnXuT5ufKlbuYugXk9i6Z4C9CvidKNPUP89LOkxrgNFLlLMkvsoC3BHHNkneDFuSeepePZwfJD37FvRCUVeaLntsyjkXply3NYwOUUczQ58Mtl/a/EKwSjU5qMWd2Z+l+hXXpJXiamkOraHbcdUJpxKJYyN2DtWhfNJDZXZFLZRdggZLZxNISYX6gvbm7bZFZP8HYzw/f7xM6eGuY7pr5uzHpruhombTHVQxJCa9SKwoOCSsbSM/yaF+Towie5zKP7wUJKpRRrdcuBFxPEMihR6jozNjSHDnaDwnFZVVgb/LPtHQn5HNgUOvKd1iP54fhv9lDltSbhI7uNuUhRaw4QVEFmXXTDvJ0WOip++GOLHCkrNFt5y4HH0TqoYddGPjmRvm2MaXMQiP2yxdtYqEWg6HfQPpSjICz0h3P4sq5UqZ+8rFRE1eNMnP2Di64ZY4JeRz32aisxPvBbuD5lTayUAhmFggkXej8xiWgeTz/bosedaDzS9LcpNjb16CVDu9P3gyPDHTuzfusGdNyiV44+BYcuMsrodUhZqSqJWHQ090t+KHdDsMHp9YTKGqGXsjSS6rDHzx7msOu+XpPTjTCEk3psSsAI7WUgTLxMzNKwdAv6g00Im4nBd/8tGG/DTRV5g1vKSlK0XJ3qDjHnPgy8uNWokNYBIRYts+kB33KYk1AolPRpbWE/dVqRSZOPicXaJopcQGyzWxmE8X7CcCZIOt2aDHBb/I8pM2z4XwktoXdOB3pBa0CW+5LK0A3hZZZPGEZca6hn5TkrjbXEH74p5G7BPS93G9wLdzJBmt4HKeVB2LBCRS+QxJVmf7gvbG49pNziSy4ZuJ1XrMBgiVkGiSTiFhksL9LB6x2jXxvOByZAv4QBarlVhpiptJ5m8xq8tvg5DagLMWn3h8OUgwXUYMWbVGRjjpZzA9z9lAKE/6Z4zP8G7jdBVOmSfaNIUxSayEdqjCYsaaC4CbjdfCpCBTPzoULKubKS/ld1PVB/a0xVcAeTXFCr2ilbx7vOk8Gxn7uqVyLDjK2BSiUuZDqShCNiJ5KyOPUKiYfwKclEBE3wk935ZcRIFLbMv8pNZ6ESrxnJevq3XUb0JzpvtvlKOoo86cKxsMBnI+U3RfmVMD7EQkFcEqySPrbeMbGYQZRHQ/RiDiEi49sV7nxfkv6qfVqfqSJw9c5qenpxKxSpUpRuZQu++YHy94uMzXanHBM9HT0JlaFJegBpm5IBY14ERwYj0sZ3uvmySoGNQrCeKvQRI26mWImFZC5+ss9W7nFCkyNVBi+sFBJkbid7BKh1+2mbPCjI9fFI4LuzRVk3g+W/8nYEc/sRhJL5cbm94m2mxJmopQFyA3YOkqiVC9xNg3E/1S21GO7hPe+kri61E7g5XOODzWeZ2NLgKcLg4tRy9wy+PYZlHUi4IUaqYMNJ2hD2K1RsX35XevsxOjD5kYZ2YAaOLG4PeN2ZYYEkw27cQlKCaTCEeyzAg+1Q66gJdZnm1efWAKRRyyaTv2loIbax+FYWmaC9i9LukIMv2VnYBlfrVSYCEGFYYK815xoSzxaEMxMcnCQCYkscOhTQvlxbX4qN8ZfNbY5CzkUXD4mzQSB0BIWxQS8uKJ1gST8E1vgrTDTG+sWeFhCRtzvNEPbvYR7SAk1iUxCxwxiUalAw2ZI8tTKQCtoeos2VrlCSIR0lBvtxwnPJ3ESrAFQcKccZECjc8Rrpgd3URVcwUENt1w2o5msNh7LKoyI+UK7FC0qbCQmEk4cb9tW+EKR5iYICU3zP48ocvf74TE4M546hzCvTKW9wQm2ZHmHl2bfsltsYUQT+1TrRmrRtQZFTyxhjYtoax8M46kZddMstrsMSvZf/l5vYRTxrggnaDxRdDClQWbfeNMElXMcC7hIb5OTxxHwwF1YbGWQDQZH/s9bIMcvg5QpQaPX1Cj2bb4zBJV3QtoVC9DskXyAk3uRW+LpSMiNEy5TZxLOJwW9d4jJgdtwbEKKa7R5u5OFNLguXSRm+BRtD6yW1YuZkTu5SnkedDEkzy1VymIQSecTCkby2wrm2VSmdxIl/b49FPoxukQvRKHnJQ30P0rC1HxJQ8FyaDtHha85QXPzydzijwVFvpyCREIjJWEhLshhvRIVo1V3bdxytwgkTOmWyLbG0WH6KaUhf6hS/+kyMIOkvdgIcRTRdKdqYpqMHnxGeBREmV90TfkZUnyFF08nrpBeCAX8tk6wkt4aPEQEfcBGCGeZURzLPOES6KZnoWRym6XGz9TcotxhCoSGIQ5vElIWPgh+hOyR+xCtRIPYkxcIvkWV2hIc0VgZes7kQPj2bFvp5pJ86IH1HNbLCSlQB4WfkOXMYicdjPL3I9LQsLshrAwkc+uW2J9CrLINnX//aKUDEHPy48csJrkiFXtoi0nVHYCCMDJglXJtksVQORL+AHnEdvweUGwtChelSFh3pYtLAwXCUsqOSRuma9V0y0zSmeW8f0kmupR7fh+1Im5LbsvZbhhgbuIsgmJWOGgqKKIUqwm5olKcbyXeJ2zDPf4RXZWlLIVBSS40i2acw/LZRbZGMwKxRNj77Q4K7FFXFXO7RmGSUpPacf8O4kOu8IdlWiNHsvD5uSzaBUrh4TpDnFTVXnGkPUWSEZNJStUlW0rAjAZZ9bq9bpSCE030dbQ84hbWnRJGhUFlmJjpXJsoDiamhvHexEkZsQ2W1TAJsJY8KkFblPIrKI9kUMCN0VTVb2kb3nhjuPbtADQRWEj5bJddngZrBeEpUXvn4OQ0LlGrSzKEEWiQEvlhSNIGE8xH++KPe9EuWTz4RJX1AtVzfPgKraoDY2WlLKK0LEX165UjIUjgg67CwxNZ4j5jJ3psztPnenUHkchNgpgwk3THtyjUMXUN9qRWdNyar2m6phrMWnxNGFYMOtGfMfRNA/XiSXynfZillEkIcHQVfcj+xhnm9VUEpSSRooGL6GgjcS4JinzyJCnR9JU1R2GhFmUfB62hwpgHBhj3qndd1JVeeVFLbeRCEL+ii/P/NniS9AmWG6Kbbcs0AEMHHRoTD4A3aYl05nKpEJVD+kUc7wygs+1U/gC2/YdizVko8Wk22kNZCyeSTCBRGwppItDeDOn0AgDGT5qCOXiAJbl4u1SsmRYr8SzihEkhLh+aRuLFY0SG68EY6ZOzljMMorkZyYXU9jRoHR6FzPnq8J2boEuMKSb6lhJtaMz7SRPtBISjMdXxtdaoWZacYZCduDTH/fwHjwvQaqfKLMherwEBJwk181q+3dR/xJi2smkvpQicogkH/TKxDCuQk+r87tu6XFqT9IeGUgW7ZMUQteWAEkqgrBsGnkrGUTFhWqQ3KWGqp5aNwOSMjbCuvZWPgskJG6XtDqQqKFhSJOQqcbHJW3nXZ5LUBcpwXJegCrKKmI3NphOv2UrjGVv4wHBWfRiCpXlc3hKJ73CTJ1VfsxZ38tO/LwLoxycWPZZ3q7nKkg9/zj9kQuHJNo1Ha3Odublh98dZjaq9MqRa0OXzDzki6tzPb0ocqTSX7dsz/ttvBST4FSVyOLjGjjjQSdrFiTLxEQnth+FFs/JWyUEQi0T5rzihCgAHD7WAWyGu6EuODUiE/B4uYKOU5H4mmPOt9tNZlA6cdk6UCscE+I9YVyz9NQSPDPxjXA+i+CqMGKA6f31dZRGwLvGfX1ah7gZH7jobJFEJVpphcs36eTT3OszM6R5811ixic+g1t/E1U92/R3XNNyUk0mF0YzFv28bPnVg0QbX5dNla9lXDwkMz5xeVzCiSjKEtIRK032BpI02cKZfthDerGGxY3cw6VSvGzoIUiau9GWRtioV2xdutc8+hSfcxkdXsanjEa7oh1YczRqpbo+XV5+2hOA7B01V2NL1CdNLB5KTc6Gl3TIbJAJ2OJHn6IzFOmd+Horcd0jiTHwlcYnZQUoa/IOGzEd8iY8o3jfqxEwRsQlo3hnyk8xUspeK3r68nJXHF82lMMkH8jt5D4J1ARJ30JZaG/Cp3oBn8R4gQM+RZBId3mvcRixQC86m+8PyyDZG+0lLyojkIFkafTkGXkxmiPgcTH2WHsojebRUTT8y1gEJEa4TLyBvkkSFESjuRIa1n6Sk3Y5ir7trhLfzMtR9PxIhuiISgl7fhQJHZzSSG3F1oALS5/BXl325nRL6ACy6lT+9Uu8NtpAkqEFFzytAy0xFF9VWnjHqdWnRTRYWjPaZAYytBGcDG0EJ0MbSDK0McIZWlSr1DWijUOfoSWXLmxoQxva0IbWmP4PEG0wuh00FxsAAAAASUVORK5CYII=" alt="Daylight Sneaker Co." style="height:46px;width:auto;display:block"></a>
+    <div style="display:flex;gap:24px;font-size:14px;font-weight:700">
+      <a onClick="{{ goAll }}" style="padding:22px 0;border-bottom:2px solid {{ tabAll }}">New in</a>
+      <a onClick="{{ goMen }}" style="padding:22px 0">Men</a>
+      <a onClick="{{ goWomen }}" style="padding:22px 0">Women</a>
+      <a onClick="{{ goBrands }}" style="padding:22px 0">Brands</a>
+      <a onClick="{{ goSale }}" style="padding:22px 0;color:#E01E00">Sale</a>
+    </div>
+    <div style="margin-left:auto;display:flex;align-items:center;gap:14px">
+      <div style="display:flex;align-items:center;gap:8px;background:#F5F5F5;border-radius:999px;padding:9px 16px;width:210px">
+        <span style="color:#93938C;font-size:14px">⌕</span>
+        <input value="{{ query }}" onChange="{{ onQuery }}" placeholder="Search sneakers" style="border:0;background:none;outline:none;font-size:13px;width:100%">
+      </div>
+      <a onClick="{{ goTrack }}" style="font-size:13px;font-weight:700">Orders</a>
+      <button onClick="{{ openBag }}" style="background:#0E0E0E;color:#fff;border:0;border-radius:999px;padding:11px 18px;font-size:13px;font-weight:700;cursor:pointer">Bag ({{ bagCount }})</button>
+    </div>
+  </div>
+
+  <sc-if value="{{ isHome }}" hint-placeholder-val="{{ true }}">
+    <div>
+      <div style="position:relative;height:620px;overflow:hidden;background:#8F8D72">
+        <img data-photo="images/IMG_4372.webp" alt="Nike P-6000 Butter Yellow" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:50% 60%">
+        <div style="position:absolute;inset:0;background:linear-gradient(90deg,rgba(10,10,10,.68) 0%,rgba(10,10,10,.2) 46%,rgba(10,10,10,0) 68%)"></div>
+        <div style="position:absolute;left:40px;bottom:56px;max-width:620px;color:#fff">
+          <div style="font-size:15px;font-weight:600;margin-bottom:14px;color:rgba(255,255,255,.9)">New in this week</div>
+          <h1 style="margin:0;font-family:'Archivo Black',Archivo,sans-serif;font-size:104px;line-height:.84;letter-spacing:-.05em;text-transform:uppercase">Butter<br>yellow</h1>
+          <p style="margin:20px 0 0;font-size:17px;line-height:1.5;max-width:42ch;color:rgba(255,255,255,.9)">Nike P-6000 in the softest colourway we have carried. Photographed upstairs, UK 4 to 11, R2 799.</p>
+          <div style="display:flex;gap:10px;margin-top:26px">
+            <a onClick="{{ openHeroProduct }}" style="background:#fff;color:#0E0E0E;border-radius:999px;padding:15px 26px;font-size:14px;font-weight:700">Shop the P-6000</a>
+            <a onClick="{{ goAll }}" style="background:rgba(255,255,255,.14);border:1px solid rgba(255,255,255,.5);color:#fff;border-radius:999px;padding:15px 26px;font-size:14px;font-weight:700">See everything</a>
+          </div>
+        </div>
+      </div>
+
+      <div style="background:#E6FF00;padding:16px 40px;display:flex;align-items:center;justify-content:space-between">
+        <div style="font-size:15px;font-weight:800">Free 48-hour courier on orders over R2 500 — nationwide, tracked.</div>
+        <a onClick="{{ goHelp }}" style="font-size:14px;font-weight:700;border-bottom:2px solid #0E0E0E;padding-bottom:2px">How delivery works</a>
+      </div>
+
+      <div style="padding:56px 40px 0">
+        <div style="display:flex;align-items:flex-end;justify-content:space-between;margin-bottom:18px">
+          <h2 style="margin:0;font-family:'Archivo Black',Archivo,sans-serif;font-size:30px;letter-spacing:-.035em;text-transform:uppercase">Shop by silhouette</h2>
+          <a onClick="{{ goAll }}" style="font-size:14px;font-weight:700;border-bottom:1.5px solid #0E0E0E;padding-bottom:2px">View all</a>
+        </div>
+        <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:12px">
+          <sc-for list="{{ categories }}" as="c" hint-placeholder-count="0">
+            <a onClick="{{ c.onOpen }}" style="position:relative;display:block;background:#F5F5F5;height:330px;overflow:hidden">
+              <img data-photo="{{ c.src }}" alt="{{ c.label }}" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:block;transition:transform .6s cubic-bezier(.2,.7,.25,1)" style-hover="transform:scale(1.05)">
+              <span style="position:absolute;left:18px;bottom:18px;background:#0E0E0E;color:#fff;padding:11px 18px;font-size:14px;font-weight:800">{{ c.label }}</span>
+            </a>
+          </sc-for>
+        </div>
+      </div>
+
+      <div style="padding:56px 40px 0">
+        <div style="display:flex;align-items:flex-end;justify-content:space-between;margin-bottom:18px">
+          <div>
+            <h2 style="margin:0;font-family:'Archivo Black',Archivo,sans-serif;font-size:30px;letter-spacing:-.035em;text-transform:uppercase">Trending in the room</h2>
+            <p style="margin:8px 0 0;font-size:14px;color:#6E6C66">Eight pairs photographed in-house this week.</p>
+          </div>
+          <a onClick="{{ goAll }}" style="font-size:14px;font-weight:700;border-bottom:1.5px solid #0E0E0E;padding-bottom:2px">Shop all</a>
+        </div>
+        <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:12px">
+          <sc-for list="{{ homeRail }}" as="t" hint-placeholder-count="0">
+            <a onClick="{{ t.onOpen }}" style="display:block">
+              <div style="background:{{ t.plate }};aspect-ratio:1/1;overflow:hidden;position:relative">
+                <img data-photo="{{ t.src }}" alt="{{ t.model }}" style="position:absolute;inset:0;width:100%;height:100%;object-fit:{{ t.fit }};display:block;transition:transform .6s cubic-bezier(.2,.7,.25,1)" style-hover="transform:scale(1.04)">
+                <span style="position:absolute;top:12px;left:12px;background:{{ t.tagBg }};color:{{ t.tagInk }};padding:5px 10px;font-size:12px;font-weight:700">{{ t.tag }}</span>
+              </div>
+              <div style="padding-top:13px">
+                <div style="font-size:15px;font-weight:800">{{ t.model }}</div>
+                <div style="font-size:14px;color:#6E6C66;margin-top:2px">{{ t.colorway }}</div>
+                <div style="font-size:13px;color:#93938C;margin-top:7px">{{ t.stockNote }}</div>
+                <div style="display:flex;align-items:baseline;gap:8px;margin-top:7px">
+                  <span style="font-size:15px;font-weight:700;color:{{ t.priceColor }}">{{ t.priceText }}</span>
+                  <span style="font-size:13px;color:#A3A39C;text-decoration:line-through">{{ t.wasText }}</span>
+                </div>
+              </div>
+            </a>
+          </sc-for>
+        </div>
+      </div>
+
+      <div style="padding:56px 40px 0">
+        <div style="background:#0E0E0E;color:#fff;display:grid;grid-template-columns:1fr 1fr">
+          <div style="padding:46px 40px">
+            <div style="font-size:15px;font-weight:600;color:#E6FF00">For members</div>
+            <h2 style="margin:14px 0 0;font-family:'Archivo Black',Archivo,sans-serif;font-size:50px;line-height:.88;letter-spacing:-.04em;text-transform:uppercase">First look at<br>every drop</h2>
+            <p style="margin:16px 0 0;font-size:16px;line-height:1.55;color:#A5A39E;max-width:42ch">Members see Thursday's pairs on Wednesday night and can hold a size before the site goes live. Free, no card needed.</p>
+            <div style="display:flex;gap:10px;margin-top:24px">
+              <a onClick="{{ goHelp }}" style="background:#E6FF00;color:#0E0E0E;border-radius:999px;padding:15px 26px;font-size:14px;font-weight:800">Join free</a>
+              <a onClick="{{ goHelp }}" style="border:1px solid #3A3A3A;border-radius:999px;padding:15px 26px;font-size:14px;font-weight:700">Sign in</a>
+            </div>
+          </div>
+          <div style="border-left:1px solid #212121;padding:46px 40px;display:flex;flex-direction:column;gap:18px">
+            <sc-for list="{{ steps }}" as="s" hint-placeholder-count="3">
+              <div style="display:grid;grid-template-columns:36px 1fr;gap:14px;align-items:start">
+                <span style="font-size:14px;font-weight:700;color:#E6FF00;padding-top:2px">{{ s.n }}</span>
+                <div>
+                  <div style="font-size:16px;font-weight:800">{{ s.title }}</div>
+                  <p style="margin:5px 0 0;font-size:14px;line-height:1.55;color:#A5A39E">{{ s.body }}</p>
+                </div>
+              </div>
+            </sc-for>
+          </div>
+        </div>
+      </div>
+    </div>
+  </sc-if>
+
+  <sc-if value="{{ isList }}" hint-placeholder-val="{{ false }}">
+    <div style="padding:34px 40px 0">
+      <div style="font-size:14px;color:#8B8983"><a onClick="{{ goHome }}">Home</a> / {{ listTitle }}</div>
+      <div style="display:flex;align-items:flex-end;justify-content:space-between;margin-top:14px">
+        <div>
+          <h1 style="margin:0;font-family:'Archivo Black',Archivo,sans-serif;font-size:42px;letter-spacing:-.04em;text-transform:uppercase">{{ listTitle }}</h1>
+          <p style="margin:8px 0 0;font-size:14px;color:#6E6C66">{{ listCount }}</p>
+        </div>
+        <div style="display:flex;align-items:center;gap:10px">
+          <span style="font-size:14px;color:#6E6C66">Sort</span>
+          <select value="{{ sort }}" onChange="{{ onSort }}" style="border:1px solid #DEDEDE;border-radius:999px;padding:10px 16px;font-size:14px;font-weight:600;background:#fff">
+            <option>Newest first</option>
+            <option>Price: low to high</option>
+            <option>Price: high to low</option>
+          </select>
+        </div>
+      </div>
+
+      <div style="display:flex;gap:8px;margin-top:22px;flex-wrap:wrap">
+        <sc-for list="{{ chips }}" as="c" hint-placeholder-count="5">
+          <button onClick="{{ c.onPick }}" style="border:1px solid {{ c.border }};background:{{ c.bg }};color:{{ c.ink }};border-radius:999px;padding:10px 17px;font-size:14px;font-weight:600;cursor:pointer">{{ c.label }}</button>
+        </sc-for>
+      </div>
+
+      <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-top:22px">
+        <sc-for list="{{ listTiles }}" as="t" hint-placeholder-count="0">
+          <a onClick="{{ t.onOpen }}" style="display:block">
+            <div style="background:{{ t.plate }};aspect-ratio:1/1;overflow:hidden;position:relative">
+              <img data-photo="{{ t.src }}" alt="{{ t.model }}" style="position:absolute;inset:0;width:100%;height:100%;object-fit:{{ t.fit }};display:block;transition:transform .6s cubic-bezier(.2,.7,.25,1)" style-hover="transform:scale(1.04)">
+              <span style="position:absolute;top:12px;left:12px;background:{{ t.tagBg }};color:{{ t.tagInk }};padding:5px 10px;font-size:12px;font-weight:700">{{ t.tag }}</span>
+            </div>
+            <div style="padding-top:13px">
+              <div style="font-size:15px;font-weight:800">{{ t.model }}</div>
+              <div style="font-size:14px;color:#6E6C66;margin-top:2px">{{ t.colorway }}</div>
+              <div style="font-size:13px;color:#93938C;margin-top:7px">{{ t.stockNote }}</div>
+              <div style="display:flex;align-items:baseline;gap:8px;margin-top:7px">
+                <span style="font-size:15px;font-weight:700;color:{{ t.priceColor }}">{{ t.priceText }}</span>
+                <span style="font-size:13px;color:#A3A39C;text-decoration:line-through">{{ t.wasText }}</span>
+              </div>
+            </div>
+          </a>
+        </sc-for>
+      </div>
+
+      <sc-if value="{{ listEmpty }}" hint-placeholder-val="{{ false }}">
+        <div style="border:1px solid #EDEDED;padding:56px;text-align:center;margin-top:22px">
+          <div style="font-size:20px;font-weight:800">Nothing matches that yet</div>
+          <p style="margin:8px auto 20px;font-size:15px;color:#6E6C66;max-width:44ch">Seventeen pairs are in the room but not photographed yet. Ask in the chat and we will send a photo of the actual pair.</p>
+          <button onClick="{{ clearFilters }}" style="background:#0E0E0E;color:#fff;border:0;border-radius:999px;padding:13px 24px;font-size:14px;font-weight:700;cursor:pointer">Clear filters</button>
+        </div>
+      </sc-if>
+    </div>
+  </sc-if>
+
+  <sc-if value="{{ isProduct }}" hint-placeholder-val="{{ false }}">
+    <div style="padding:34px 40px 0">
+      <div style="font-size:14px;color:#8B8983"><a onClick="{{ goHome }}">Home</a> / <a onClick="{{ goAll }}">New in</a> / {{ p.model }}</div>
+      <div style="display:grid;grid-template-columns:1.15fr .85fr;gap:40px;margin-top:18px">
+        <div>
+          <div style="background:{{ p.mainPlate }};aspect-ratio:4/3;position:relative;overflow:hidden">
+            <img data-photo="{{ p.mainSrc }}" alt="{{ p.model }}" style="position:absolute;inset:0;width:100%;height:100%;object-fit:{{ p.fit }};display:block">
+          </div>
+          <div style="display:flex;gap:8px;margin-top:10px">
+            <sc-for list="{{ p.shots }}" as="s" hint-placeholder-count="0">
+              <button onClick="{{ s.onPick }}" style="width:92px;height:74px;padding:0;border:2px solid {{ s.border }};background:{{ s.plate }};position:relative;overflow:hidden;cursor:pointer">
+                <img data-photo="{{ s.src }}" alt="" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:block">
+              </button>
+            </sc-for>
+          </div>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:26px;margin-top:34px;padding-top:26px;border-top:1px solid #EDEDED">
+            <div>
+              <div style="font-size:16px;font-weight:800">Shot in-house</div>
+              <p style="margin:6px 0 0;font-size:14px;line-height:1.55;color:#6E6C66">{{ p.shotNote }} The photo is the pair that arrives — no catalogue images.</p>
+            </div>
+            <div>
+              <div style="font-size:16px;font-weight:800">Fit &amp; sizing</div>
+              <p style="margin:6px 0 0;font-size:14px;line-height:1.55;color:#6E6C66">UK sizing, true to size. Between sizes on this model, take the half size up.</p>
+            </div>
+          </div>
+        </div>
+
+        <div>
+          <div style="font-size:14px;color:#8B8983;font-weight:600">{{ p.brand }}</div>
+          <h1 style="margin:6px 0 0;font-family:'Archivo Black',Archivo,sans-serif;font-size:38px;line-height:1;letter-spacing:-.035em;text-transform:uppercase">{{ p.model }}</h1>
+          <div style="font-size:16px;color:#6E6C66;margin-top:6px">{{ p.colorway }}</div>
+          <div style="display:flex;align-items:baseline;gap:10px;margin-top:16px">
+            <span style="font-size:24px;font-weight:800;color:{{ p.priceColor }}">{{ p.priceText }}</span>
+            <span style="font-size:16px;color:#A3A39C;text-decoration:line-through">{{ p.wasText }}</span>
+            <span style="font-size:13px;font-weight:700;background:{{ p.tagBg }};color:{{ p.tagInk }};padding:5px 10px">{{ p.tag }}</span>
+          </div>
+
+          <div style="display:flex;justify-content:space-between;align-items:baseline;margin-top:28px">
+            <div style="font-size:15px;font-weight:800">Select your UK size</div>
+            <a onClick="{{ goHelp }}" style="font-size:14px;color:#6E6C66;text-decoration:underline">Size guide</a>
+          </div>
+          <div style="display:grid;grid-template-columns:repeat(5,1fr);gap:8px;margin-top:12px">
+            <sc-for list="{{ p.sizeGrid }}" as="s" hint-placeholder-count="9">
+              <button onClick="{{ s.onPick }}" disabled="{{ s.disabled }}" style="border:1.5px solid {{ s.border }};background:{{ s.bg }};color:{{ s.ink }};padding:14px 0;font-size:15px;font-weight:700;cursor:{{ s.cursor }};text-decoration:{{ s.strike }}">{{ s.label }}</button>
+            </sc-for>
+          </div>
+          <div style="font-size:14px;color:{{ p.hintColor }};margin-top:10px">{{ p.sizeHint }}</div>
+
+          <button onClick="{{ addToBag }}" style="width:100%;margin-top:20px;background:#0E0E0E;color:#fff;border:0;border-radius:999px;padding:17px;font-size:15px;font-weight:800;cursor:pointer">Add to bag</button>
+          <button onClick="{{ reserveOnChat }}" style="width:100%;margin-top:10px;background:#fff;border:1.5px solid #0E0E0E;border-radius:999px;padding:16px;font-size:15px;font-weight:700;cursor:pointer">Ask about this pair on WhatsApp</button>
+
+          <div style="margin-top:26px;border-top:1px solid #EDEDED">
+            <sc-for list="{{ productFacts }}" as="f" hint-placeholder-count="4">
+              <div style="display:flex;justify-content:space-between;gap:20px;padding:14px 0;border-bottom:1px solid #EDEDED">
+                <span style="font-size:14px;color:#6E6C66">{{ f.k }}</span>
+                <span style="font-size:14px;font-weight:700;text-align:right">{{ f.v }}</span>
+              </div>
+            </sc-for>
+          </div>
+        </div>
+      </div>
+
+      <div style="margin-top:56px">
+        <h2 style="margin:0 0 18px;font-family:'Archivo Black',Archivo,sans-serif;font-size:26px;letter-spacing:-.035em;text-transform:uppercase">Also in the room</h2>
+        <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:12px">
+          <sc-for list="{{ related }}" as="t" hint-placeholder-count="0">
+            <a onClick="{{ t.onOpen }}" style="display:block">
+              <div style="background:{{ t.plate }};aspect-ratio:1/1;overflow:hidden;position:relative">
+                <img data-photo="{{ t.src }}" alt="{{ t.model }}" style="position:absolute;inset:0;width:100%;height:100%;object-fit:{{ t.fit }};display:block">
+              </div>
+              <div style="padding-top:12px">
+                <div style="font-size:15px;font-weight:800">{{ t.model }}</div>
+                <div style="font-size:14px;color:#6E6C66;margin-top:2px">{{ t.colorway }}</div>
+                <div style="font-size:15px;font-weight:700;margin-top:7px;color:{{ t.priceColor }}">{{ t.priceText }}</div>
+              </div>
+            </a>
+          </sc-for>
+        </div>
+      </div>
+    </div>
+  </sc-if>
+
+  <sc-if value="{{ isCheckout }}" hint-placeholder-val="{{ false }}">
+    <div style="padding:34px 40px 0">
+      <div style="font-size:14px;color:#8B8983"><a onClick="{{ goHome }}">Home</a> / Checkout</div>
+      <h1 style="margin:14px 0 0;font-family:'Archivo Black',Archivo,sans-serif;font-size:42px;letter-spacing:-.04em;text-transform:uppercase">Checkout</h1>
+      <p style="margin:8px 0 0;font-size:15px;color:#6E6C66">Two steps: your details, then how you want to pay. Nothing is charged until we confirm your size is in the room.</p>
+
+      <div style="display:grid;grid-template-columns:1.25fr .75fr;gap:34px;margin-top:26px">
+        <div>
+          <div style="font-size:18px;font-weight:800">Where it goes</div>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:14px">
+            <sc-for list="{{ formFields }}" as="f" hint-placeholder-count="6">
+              <label style="display:block;grid-column:span {{ f.span }}">
+                <span style="display:block;font-size:14px;font-weight:600;margin-bottom:6px">{{ f.label }}</span>
+                <input value="{{ f.value }}" onChange="{{ f.onChange }}" placeholder="{{ f.placeholder }}" style="width:100%;box-sizing:border-box;border:1.5px solid {{ f.border }};padding:14px;font-size:15px;outline:none;background:#fff">
+                <span style="display:block;font-size:13px;color:#E01E00;margin-top:5px">{{ f.error }}</span>
+              </label>
+            </sc-for>
+          </div>
+
+          <div style="font-size:18px;font-weight:800;margin-top:30px">How it gets there</div>
+          <div style="display:grid;gap:10px;margin-top:14px">
+            <sc-for list="{{ deliveryOptions }}" as="d" hint-placeholder-count="2">
+              <button onClick="{{ d.onPick }}" style="display:flex;justify-content:space-between;align-items:center;gap:16px;text-align:left;border:1.5px solid {{ d.border }};background:{{ d.bg }};padding:16px;cursor:pointer">
+                <span>
+                  <span style="display:block;font-size:15px;font-weight:800">{{ d.title }}</span>
+                  <span style="display:block;font-size:14px;color:#6E6C66;margin-top:3px">{{ d.body }}</span>
+                </span>
+                <span style="font-size:15px;font-weight:800;white-space:nowrap">{{ d.cost }}</span>
+              </button>
+            </sc-for>
+          </div>
+
+          <div style="font-size:18px;font-weight:800;margin-top:30px">How you pay</div>
+          <div style="display:grid;gap:10px;margin-top:14px">
+            <sc-for list="{{ paymentOptions }}" as="m" hint-placeholder-count="3">
+              <button onClick="{{ m.onPick }}" style="display:flex;justify-content:space-between;align-items:center;gap:16px;text-align:left;border:1.5px solid {{ m.border }};background:{{ m.bg }};padding:16px;cursor:pointer">
+                <span>
+                  <span style="display:block;font-size:15px;font-weight:800">{{ m.title }}</span>
+                  <span style="display:block;font-size:14px;color:#6E6C66;margin-top:3px">{{ m.body }}</span>
+                </span>
+                <span style="font-size:14px;font-weight:700;color:#6E6C66;white-space:nowrap">{{ m.note }}</span>
+              </button>
+            </sc-for>
+          </div>
+        </div>
+
+        <div>
+          <div style="border:1px solid #EDEDED;padding:22px">
+            <div style="font-size:18px;font-weight:800">Your order</div>
+            <div style="margin-top:14px;display:flex;flex-direction:column;gap:12px">
+              <sc-for list="{{ bagItems }}" as="b" hint-placeholder-count="0">
+                <div style="display:grid;grid-template-columns:64px 1fr auto;gap:12px;align-items:center">
+                  <div style="background:{{ b.plate }};height:52px;position:relative;overflow:hidden">
+                    <img data-photo="{{ b.src }}" alt="" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:block">
+                  </div>
+                  <div>
+                    <div style="font-size:14px;font-weight:800">{{ b.model }}</div>
+                    <div style="font-size:13px;color:#6E6C66">{{ b.meta }}</div>
+                  </div>
+                  <div style="font-size:14px;font-weight:700">{{ b.lineTotal }}</div>
+                </div>
+              </sc-for>
+            </div>
+            <div style="margin-top:18px;padding-top:14px;border-top:1px solid #EDEDED;display:flex;flex-direction:column;gap:9px;font-size:14px">
+              <div style="display:flex;justify-content:space-between"><span style="color:#6E6C66">Subtotal</span><span style="font-weight:700">{{ subtotalText }}</span></div>
+              <div style="display:flex;justify-content:space-between"><span style="color:#6E6C66">{{ deliveryLabel }}</span><span style="font-weight:700">{{ deliveryText }}</span></div>
+              <div style="display:flex;justify-content:space-between;padding-top:9px;border-top:1px solid #EDEDED;font-size:17px"><span style="font-weight:800">Total</span><span style="font-weight:800">{{ totalText }}</span></div>
+            </div>
+            <button onClick="{{ placeOrder }}" style="width:100%;margin-top:18px;background:#0E0E0E;color:#fff;border:0;border-radius:999px;padding:17px;font-size:15px;font-weight:800;cursor:pointer">{{ placeLabel }}</button>
+            <p style="margin:12px 0 0;font-size:13px;line-height:1.5;color:#8B8983">Your order is saved with a reference number before anything opens, so nothing gets lost if the chat drops.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </sc-if>
+
+  <sc-if value="{{ isConfirm }}" hint-placeholder-val="{{ false }}">
+    <div style="padding:34px 40px 0">
+      <div style="display:grid;grid-template-columns:1.1fr .9fr;gap:34px">
+        <div>
+          <div style="display:inline-block;background:#E6FF00;padding:7px 13px;font-size:14px;font-weight:800">Order saved</div>
+          <h1 style="margin:16px 0 0;font-family:'Archivo Black',Archivo,sans-serif;font-size:52px;line-height:.9;letter-spacing:-.045em;text-transform:uppercase">Thanks, {{ firstName }}.<br>We are on it.</h1>
+          <p style="margin:16px 0 0;font-size:16px;line-height:1.6;color:#54524D;max-width:52ch">Your reference is <b>{{ ref }}</b>. {{ confirmLine }} A person replies from the shop, usually within the hour — no bots.</p>
+          <div style="display:flex;gap:10px;margin-top:24px">
+            <button onClick="{{ goTrack }}" style="background:#0E0E0E;color:#fff;border:0;border-radius:999px;padding:15px 26px;font-size:14px;font-weight:800;cursor:pointer">Track this order</button>
+            <button onClick="{{ goHome }}" style="background:#fff;border:1.5px solid #0E0E0E;border-radius:999px;padding:14px 26px;font-size:14px;font-weight:700;cursor:pointer">Keep shopping</button>
+          </div>
+          <div style="margin-top:34px;border-top:1px solid #EDEDED;padding-top:20px;display:grid;grid-template-columns:1fr 1fr;gap:20px">
+            <div>
+              <div style="font-size:15px;font-weight:800">Going to</div>
+              <p style="margin:6px 0 0;font-size:14px;line-height:1.55;color:#6E6C66;white-space:pre-line">{{ addressBlock }}</p>
+            </div>
+            <div>
+              <div style="font-size:15px;font-weight:800">Paying by</div>
+              <p style="margin:6px 0 0;font-size:14px;line-height:1.55;color:#6E6C66">{{ payLine }}<br>Total {{ totalText }}</p>
+            </div>
+          </div>
+        </div>
+        <div style="background:#0E0E0E;padding:22px;display:flex;flex-direction:column;gap:12px">
+          <div style="display:flex;align-items:center;gap:9px;font-size:13px;color:#8B8983;font-weight:600">
+            <span style="width:8px;height:8px;border-radius:50%;background:#25D366"></span>Daylight — this is what we received
+          </div>
+          <div style="background:#25D366;color:#0B2F17;border-radius:16px 16px 16px 5px;padding:15px 17px;font-size:14px;line-height:1.65;white-space:pre-line">{{ waMessage }}</div>
+          <div style="align-self:flex-end;background:#242424;color:#DDDBD5;border-radius:16px 16px 5px 16px;padding:13px 16px;font-size:14px;max-width:80%">{{ replyLine }}</div>
+          <button onClick="{{ copyMessage }}" style="margin-top:auto;background:#E6FF00;color:#0E0E0E;border:0;border-radius:999px;padding:15px;font-size:14px;font-weight:800;cursor:pointer">{{ copyLabel }}</button>
+        </div>
+      </div>
+    </div>
+  </sc-if>
+
+  <sc-if value="{{ isTrack }}" hint-placeholder-val="{{ false }}">
+    <div style="padding:34px 40px 0">
+      <div style="font-size:14px;color:#8B8983"><a onClick="{{ goHome }}">Home</a> / Track my order</div>
+      <h1 style="margin:14px 0 0;font-family:'Archivo Black',Archivo,sans-serif;font-size:42px;letter-spacing:-.04em;text-transform:uppercase">Track my order</h1>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:34px;margin-top:24px">
+        <div>
+          <div style="display:flex;gap:10px">
+            <input value="{{ trackRef }}" onChange="{{ onTrackRef }}" placeholder="Reference, e.g. DL-4821" style="flex:1;border:1.5px solid #DEDEDE;padding:15px;font-size:15px;outline:none">
+            <button onClick="{{ lookUp }}" style="background:#0E0E0E;color:#fff;border:0;padding:15px 24px;font-size:14px;font-weight:800;cursor:pointer">Look up</button>
+          </div>
+          <div style="font-size:14px;color:#6E6C66;margin-top:10px">{{ trackNote }}</div>
+          <div style="margin-top:28px;display:flex;flex-direction:column">
+            <sc-for list="{{ timeline }}" as="s" hint-placeholder-count="4">
+              <div style="display:grid;grid-template-columns:22px 1fr;gap:16px">
+                <div style="display:flex;flex-direction:column;align-items:center">
+                  <span style="width:14px;height:14px;border-radius:50%;background:{{ s.dot }};border:2px solid {{ s.ring }}"></span>
+                  <span style="flex:1;width:2px;background:{{ s.line }};min-height:{{ s.lineH }}"></span>
+                </div>
+                <div style="padding-bottom:22px">
+                  <div style="font-size:16px;font-weight:800;color:{{ s.ink }}">{{ s.title }}</div>
+                  <div style="font-size:14px;color:#8B8983;margin-top:3px">{{ s.when }}</div>
+                  <p style="margin:6px 0 0;font-size:14px;line-height:1.55;color:#6E6C66;max-width:44ch">{{ s.body }}</p>
+                </div>
+              </div>
+            </sc-for>
+          </div>
+        </div>
+        <div style="background:#F5F5F5;padding:24px">
+          <div style="font-size:18px;font-weight:800">Anything wrong with the fit?</div>
+          <p style="margin:8px 0 0;font-size:15px;line-height:1.6;color:#54524D">Fourteen days, unworn, courier included. Message the same chat and we send a collection slot — no forms, no ticket numbers.</p>
+          <div style="margin-top:18px;display:flex;flex-direction:column;gap:10px">
+            <sc-if value="{{ hasOrder }}" hint-placeholder-val="{{ false }}">
+              <div style="background:#fff;padding:16px">
+                <div style="font-size:14px;color:#8B8983">Reference</div>
+                <div style="font-size:20px;font-weight:800;margin-top:2px">{{ ref }}</div>
+                <div style="font-size:14px;color:#6E6C66;margin-top:8px">{{ orderSummaryLine }}</div>
+              </div>
+            </sc-if>
+            <button onClick="{{ goHelp }}" style="background:#0E0E0E;color:#fff;border:0;border-radius:999px;padding:15px;font-size:14px;font-weight:800;cursor:pointer">Message the shop</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </sc-if>
+
+  <sc-if value="{{ isHelp }}" hint-placeholder-val="{{ false }}">
+    <div style="padding:34px 40px 0">
+      <div style="font-size:14px;color:#8B8983"><a onClick="{{ goHome }}">Home</a> / Delivery, returns &amp; sizing</div>
+      <h1 style="margin:14px 0 0;font-family:'Archivo Black',Archivo,sans-serif;font-size:42px;letter-spacing:-.04em;text-transform:uppercase">How this works</h1>
+      <div style="display:grid;grid-template-columns:repeat(2,1fr);gap:26px;margin-top:26px">
+        <sc-for list="{{ assurances }}" as="a" hint-placeholder-count="4">
+          <div style="border-top:2px solid #0E0E0E;padding-top:16px">
+            <div style="font-size:14px;color:#8B8983;font-weight:600">{{ a.k }}</div>
+            <div style="font-size:20px;font-weight:800;margin-top:6px">{{ a.t }}</div>
+            <p style="margin:8px 0 0;font-size:15px;line-height:1.6;color:#54524D;max-width:52ch">{{ a.b }}</p>
+          </div>
+        </sc-for>
+      </div>
+      <div style="margin-top:34px;background:#F5F5F5;padding:26px;display:flex;justify-content:space-between;align-items:center;gap:24px">
+        <div>
+          <div style="font-size:20px;font-weight:800">Still deciding on a size?</div>
+          <p style="margin:6px 0 0;font-size:15px;color:#54524D;max-width:56ch">Send us your usual size in another model and we will tell you how this pair runs. We measure the insole if you want the number.</p>
+        </div>
+        <button onClick="{{ goAll }}" style="background:#0E0E0E;color:#fff;border:0;border-radius:999px;padding:15px 26px;font-size:14px;font-weight:800;white-space:nowrap;cursor:pointer">Back to shopping</button>
+      </div>
+    </div>
+  </sc-if>
+
+  <div style="margin-top:56px;background:#0E0E0E;color:#fff;padding:44px 40px 26px">
+    <div style="display:grid;grid-template-columns:repeat(4,1fr) 1.2fr;gap:30px;padding-bottom:30px;border-bottom:1px solid #212121">
+      <sc-for list="{{ footer }}" as="f" hint-placeholder-count="4">
+        <div>
+          <div style="font-size:14px;color:#6E6C66;font-weight:600;margin-bottom:13px">{{ f.h }}</div>
+          <div style="display:flex;flex-direction:column;gap:9px;font-size:14px;color:#C9C7C2">
+            <sc-for list="{{ f.links }}" as="l" hint-placeholder-count="4">
+              <a onClick="{{ l.onGo }}">{{ l.label }}</a>
+            </sc-for>
+          </div>
+        </div>
+      </sc-for>
+      <div>
+        <div><img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAARIAAADwCAMAAAD7EhssAAAAIGNIUk0AAHomAACAhAAA+gAAAIDoAAB1MAAA6mAAADqYAAAXcJy6UTwAAADkUExURf///5CMhn56dLmzq+Lc1Ofh2t/Y0dfSy/Hs5+3o4tjSysfCu722rsO9tNTMw9vUy8rCuLuzqWpkXZd3TcS+tsfBuJ+YkODYzs3FvLq0rMS+t5OOh9HIvbGpoMe/tr21rHVcPaGbk7aupamimpOKfohuSLKJUqyDTa6BSL2RVseXWM6hZLuNUbWHTCwqJzgzLERBPcyeYcyaWtKkZqt/Rtatc7ubcNGgXtW7mraJT4VlO510QdChZOHRubWITUhEPkA7NX12b6d6RJZuPJVsO4iCeppvPJ1yPo+IgKaflq6mno5xTEripagAAAABdFJOUwBA5thmAAAAAWJLR0QAiAUdSAAAAAd0SU1FB+oIFg07LDi7wU4AACY4SURBVHja7V2JQ+JI1qdSIVEwh9CTxJkQNDRIq4AHvU53f7vaHtvK/v//z/eOqhwcKs4qMOubaYgcIfXLu+tVvUrlgz7ogz7ogz7ogz7ogz7ogz7ogz7ogz7ogz7oXUlUhGGIVV/FWpGUZhXJsqUAWvXlrAcZNoCytV2t1Xek43q2vysbxv8qOEI08VE6plVlMpGAZSxzu2ratv1Jyvr/klgBFrYLZFW3qxoSftqubmcv4YHp2bXfZP3vzzoicKvziSHZ1sf8DE9mCHLlyL+xPhbSzhhhCpNt/XLxPbMahqYZWh4QQlP/WyIjbNPMQVjAMhoQ0DMhkEXkuQCM5fpS/u2AccwyAibrWHMaGc+C14BFEBMPGAUe8P8wBGQiR+6tehz/TTKrM6DMHpsW40RsEnrIKfjo4TPCBBjV/j7s4ru/T3OEOQ0OSAyCYpHUZLJDwmOxLMGDSf7eqofz1+kPaVtWAY1tBqIoOJo/TOYGJIue3VhDAoxikqYBm/TbpqMiW3NsDumTApuErF5ITiyCwwJ/BjBBpeIBIChPrHvDEHw8uepR/TUCf147IdsFFEyNTcGpNS3WqF5GBA+IDfIHcgk/wyf9zWYVo7ZdMLdmJi2Z+OBYWS7Y2LhExCQWo0RoIG8hJFV0X8LaZoNSC4tSY2q+MKuMC0OiVKunISFUSKWgPmGpYeEhETPN3c0FRTR+j7wpe2Mq7aFEAfWnxQbX9ZhDMkzYElukfeHjFmtZ+re5OsWxbdPeLsd+xCLokZELj0NFkYFHLTQZl7DoWPhBts8aQc+q2pvKKHXQsbUtvHzhK3kxWQZAb7o8alYhltYk9BizNsk4BXCLwS6zRkGugvNsKKMgFlWLDneI8xXBwAJ8W+zVpXRqCImyNC4MnYDReFmm8mLdpO16LDYhiVNt1aN7LSQV5UsINBehjnJMc7/8QQHY1GzikZikhzkkJGUSKk5xEROT1Qk8RZsqPJ8qGhIOZ9jymAcLQNyRjh+xigU0UA0TryAWFumdkLUsPngbiAlespJ5QZGdssPV51SB2JNBkCYumlz22pSOVYYHn5FxNg+TehkSTZgKeIl2BGBqKEKWMkxspCwdIcKZ7FWP8C9BgmaC/VVExPrtpecwZMv2OCxkM0xWm2JCONfmYaJgQUhAFbBbwkH/MjZUdBybDRB9lXwW9mrC6ibaHQ1JNaQ4mFjECqtLuhWGrJkcLSMkKvxBd38T/RNDPStfHi0I3vClR7IjawoL5cHpgGDzVKy+Yo6BYRA4Htdd/uZ2pK/w4JiIfFg42DzR0ZCw1NAorFdBUomUk6sgCTnkCav1VQ/x1ZCopCLdXst7BSR+3XddFR2HlvLXwIBtXAiYCY5iEvYwrGD5M8nKDvpulqVUq1ImZrW16jEuSZqttZtW5Sz8K7gEFLW0bKVIyHtl5WRan1c9yNdBkuWeMWR7FSTAb/VapVOj71sU9jAkpr/qQb6OdHJeCc/rIBEAsPQo3xhqLkGNbSx/tjUgUyUaOeHxWkhw7L97NKMeqmQ2eoCbZ4gVJFXOqqHVeU32FL+CkAiHEyhaDDFI2DSjk0GCt5Ssp/caLtGQVD677LtWlcUB+rTq4b0SEq0NMRv9OsFRJt3XU11ZKYK36uG9CpJtBQkZjNdOOzAke5apJourrEuq5iZKDt/SKnlYr/NLCuSTmjb1BBmcewMDYg0JC85fhUTqCUN10s2UHLK/VT2T81pItHx4+RyqynFvoOSoea0qB7AvhqTZbBYR2VEHvqkB1hNmGxcPVyoWcAldPE5ePBcJN7u9w37/y5ej4+MjoJPByaDf6zaHPQ2JVIok1PUq5gaaYVPdV4sTBAshGZ12e1/Ojs6Pz4Auzi6Oz4/OAJWzE3gYnPTHzDT1kDUJKVnCZAMdWCtk3arqIhZA0uwdfjk6uvh6cXxxfHx2cXF+THR2jLAAOPB00gNUDI4N0PMzuYLHXfUAXwGJqQKcJxx6kJcvx18vAA0E5fgCICFMkF3Oz8+RWRCUL72mYWo5DFUoaa16gMtTmBXYLOKSZq/3j68XX78Cg1wgARYXwBp4cMb/Ix0DShdf/hHqqTLFfKa56gEuT6ZyONVc+Swk/V7/7CtAwljA81cYPXLJ5QVihMJzdgTMQq/+GepJd44RNtIKm1yfaKpyvGlIusdfAYmvQMfMI8gml5eXgAghdHZ+hFAAm4AAnZ/9yaWOamaIqvA3DxLXQ0i08EwJTrP7BSQGpeaCxebyEhXJ5fk5qhQUmuNzEpzjM9QoxCWFKWbSJZsHCReoVUOlU0qQNI3+EULyVXHHBcrNhVYoZ8AoAAscApMgImCV/9SBsK6mDTeQS1TBXqiKkYqQgF49Jg5BBQKOCEmOfjpDaTlmaM4ZEaA/Qx0v6cxUuOoBLk+epStcqQSvCEmve/SVRIYfmU1IYhiScxYeVCUICTptsVLVoQ51wg00wqqKguviS5AYlS9fNSSZZiVRIS4hDw216jlbGwTlmCu0stUs8LiBobCpKqq4SjOHpNnrfiuCcXFJtgYZBP+D8TMdEbNcIiQnJ1/VooPQ1A59dQMrTVQdPAHiFXKvvX4XRg48orQr2WCK9vq9bxwGQzTc7H4fH/a/oLFBi/Ona1l5Spog8Vc9wOWJ5y25bNXKI+F9iHi/Kh8ePRMKbgCRXnPOOZrjHwPkmLPI83JIuMzYWfUAXwVJWLUs0ieFdHTz6Bzds7NjDmpIl55/+bbwNM1xf9D/v5jKqznkU5XXwf6qR7g08RIBLNqkKpEMkrM+2t6zs6/ojLFD1n/6TM1xgAsOLLMEyZ/jjcOEVwh4uEigmELqnh2zqJDEXKDn/uXZc7U8j0s98wVx4deL/rPfWzPihXq0bgJkKCu56R2TbaHIBr0zEKHms+eKXU/NCGWLwf4JHDZe9RiXI0GJeV6+iGXhGpI+uhwICdmZc/TInj2XtHgdbcYjoKT+PL+8PO+tepTLQUIaJKQFFG6cQzIGh+P4Qhsa9FWPnj2XqxzhbB2YVQ0vjr4cHT8vcutEwuM6Z4vWl0TZGtfmvyDiQ+64vIQQBpNnR88JjuRo2lITfeTS//P8st/81t9f9TCXgsRS60kAEadYDtL9co5OOwgMZkYQku5zZ1L5W7PgqHWOXsBda0bCpWpVz1OLoIenV9dDOmpiFh7DF0QEQ5n+02wS8aIcS1WX0HLKT5Vuf8OUK0JC7qY2vtdXV1fXI96b4/vZJcZzl5g2AmBQBJ44UY2KxXnqI1T6BPOuvW/PX8R6kaDV0HpB63B0en19PWI2qfSBRy4RkksM6zDYHS8CRdSsLDdnZv484vztedu9ZiRiUCUUhwyvFCij0akc4vH+EerWS+aUS47/vxyOu82ZUcrIDPMCJJ1Vq+JbzY2DZB8sjY8H16BDGJPR6FrJUR8l5vyY2ERBQkmAQf+w1y0M1fcsK8wVKyUGTGaSysYhAoLj4nzcsHEKpDG5llzZbGAyHtlECQ8nE8/Vv6P+mFhARJzjN8OS5KhMyQZC4qF3Jn5SdRUbYZAdoTD5xxGo1SNkEJYcDcp59gdNBouA1GlelEXqtb6pkKDDOpVEH47EJ94RSjR7xxc4QcMoaD5hWDi3OBiAmd3vdfyCZiUmUV7fBkISzW7KMhw2GqhY6I0e5UouM5Fh6vcH/T4dDQYnJ4ObH+Puficy1d44aIk3sSJrMQ1H8pr1SmUfTfGRhiTnEPh7cHg4vj0cnCAkgM/Nbbfb+dPT88EbmHKdS4J9tKEQQ/0KePaX51hMUsaE0s9Hg3/d9sa3NwPgFETl7va2h9uUbeQS0Llk3P9sNBrTKNE8udKlOTD66OSofzse/xsAGSAo/cNutxVWN28pzjwSjZ/3QdAKGn/MvNXrfx9/yU3vFIHY9P/169e/+ycIyaB/d9hv/R0QEY37h8e0vdtOgp+zwxn3xuPDAggzmAz6N/8COAgTOP5xOHzFNayURlN/G8HDVZAkyUFFJmkwz1R0x/3B0UIisQEFm4lP/zbHZPMc+or4Iwgm7TRIk7aEWCWeLFjK1ptlEnV0Mhiw1TkhNYt0c3uaQbLqAb6EDgqZIvEzeGzHEKI8Pk7a7bSdxEnQWPC93tGRntUryg25JuSyETBIcDTYqJzAaXa0f/8QtCNc0mq1Hydp2k5Tx3l4WPRF8M2+FHWIejzJuWOgIQGc/r0R/FEm8fNh0k6iiPZpcR9ToIMnv9Ac90Gt9HO1eoJMkgFygsZHgYLvnGxMYl7dvP3GA+gQUKoJ7unjWSlyyXPGk7477jMaWmgIjCP1TyHCaqa/IYzCmqTxE5VqmiZRkkQxQBIFkzR5bmUvFwwMmjinoaXmaHDE/HJCQJywrlWlFpuReKVleOCXgUKdTKSTtoMgwf18gsc0SR5GLzgDjHPYPzxEJ2SQw4Cso4DKabARwgMuwxUg0jBwi/6h0WmAN4KMkgCbpJOF9qZANHsxBmD2xwPmDQVIBoR6RMg2Qnj2Gz8fgvvhaFgZiaYhRo0UVUoUB2CP05es7KVBcqHJeNzsnbCqJVPMx6hgTpRJ3gRMQIs8BoExPD0dnV6fnjZF0G4n4JM8gkGem+TQWdkyJF19OETXdqB1LP2vfDemo8G6Y9J4mEwegwfgEFxQAoNqTNAfCcBFCRYZnGEZkv1pXIZ9ZogjYpTMYev3lT3urjcoj+nk8RE0ximNtWIYrTaqEFAkB0udp5k9VLrAJ8QqbIUBGfbX+spLOToZv0Rrr4xSACRoDEeGaAwxWWSkiMgk1TJzfb0EGuruH/4HD8aZn8Yem35C/TLuPnvWlZEAqQkCzMIP4c4ZQxHACzkgleHV6bPn6E5Dosfbvck8epYcZhKdyF9T6qSISYMRqTSNgwCc2KISYRYfjkaLcx5FNEqQaE65uRncUOakz+ist9PmJIhJ4xQ05ujUEJ3gPpjMGt7R9fXVEuJfkIr9W9arNzeIC8sPPebpgnUjvw2IGGBDxOlINAJAZJ7hHQ5HNILrl6XHSopifHPTzy1Ovz/guLD/fdVDX0RgW8BxRRLGQ/Dws+itlnq/oOEF8Vkeksrp7Q0anX4fsEFeQdsDluh2TTWscf/z/v7hAcB4QEekhIhsd8ofHg5LCmW4kGWmBrv//d8nAxIdIETmBiHpr6kllkGj8VMRQHOfI/LHpO1OL2MbPiE389Wrou/IGgwJYEMSdDK4WU8N2wLtgbM1DYWMft14nCTmdrVqy8aelHJH5JAswKW54Ji/eEfMobgEE9Q3qFXWUXSEG4GwPPxsXF1dASiNKwUIhDcuFjVGkWtxmwtX0ozfEL3+KUxmIdqfeaV7R3BoVOAAPbd11LDD/V03mgQP98AgyCnXCFPj4WESuXEE5jmxuEaTlheRFA21ih0uNzcz1mqEngeEyJpKTsVwXLf9iMoV/rtv3N/fBymwRzudTFKXuw6EskZdlhATLEpScC71M12G49eNlh+0QD9WPfhFJGTiukkK4TAYn2DiJ0nSBtucqh3WLcsDNYzSE2KnpCG5ueDYLWkvMpOjMUHZWfXQn6DGYxTHsWuDvCRtBOfhMdFbqgMkuJ8eVcMbSr8Oh8PTJ063P+e12ylIyBJfr3rgT5HoPKbALDEExo/gwrYx+0rTF7icBj38OvYVMj9z+RoQjWaB8MyzJLesXX/Af5oGg9tVD/sZ2g/SJEnBm31McEkB9SPwLNw3marMpGVWt80dhqRCgjNcDhKcMf/1Qxke9GWLc8WrpkUZ1X0JUpO4apUFM0loVtkrcWipL9VtISTIKswzL/rJ25uyfiVYvq8PJE9MWRmyRrN9ru6TBNqEPy64otf6RIAONSRDrWfrNay7P11w3rscEvr36+bXYC19tfmA1Xe5kl4t3vTV645efaU37yl6s4a1tQ2G2pbzOXB4lzPHL8Lk7tfgZH3zSHNhcWxcv1WsMzN42/6pnRaVURYhQLJVNbe253Zk+37DepXguPn148cdHA32Vz3MpWEx5KdduZP/7TEk20ZJs45Gp9fDodje2t6yqvBYDb2Z9n1DkBNE45dSJj+AS0C9rmcsXLrwZ95XTEJsM8xAGV5jzsAAMOzq1pYZbpsWdmy2f6vnTTBv75g9yAazLvl192MD1oIa6cGT9433l5jpYIDgCBukxt7aqlpbHni64TYcAjCmjW2IK99u7+4QiB+/kO5+Ecfc3q5pjFOimhUHi6c8hVozMUdX1GH4trcFD6BjPdC0VXdra8szt3UPzNEtYvLj7gdgc8f43Nzsr3q8L6AD3O85XYSKpI19S8pVSY/cmiLqZWY78sDIhn37CxC5Ax3yAzAhl+3Xqoc7Q3MsoIiAC8BRa3fmWQ2bl7YW3lKZR8E42DXnN0nUaTQahnE6grj5NEuvMHsAHCQ+N3d36+fOzxt1y8J0EfbLSg+m35fslBQ1iRqtjZojMzLkwwEU15iWusonO7qMCD6CAN3c3qydozacJx4NF/QnRjbYby7tFD9CMU55SxZC5LoiUEp2iGcwnQJojHCZJCByVSoy0IjcoVdyO747XTUEMzQPkmYChhbb83F3QrcdNPhjOzauDtiuzjTrGIJPUqN2bpjAZw4Z0SrJ69GoHBfeoiYhQMAtub1dwzRjZ96LuL+GF+EDd+rAPbXtmqvbo27PLpmYybINs/CnTHX/HwwJKFmwwOunSSricd6rBhYCJxH15cMGdNmuEtu8u9McBYQq9rlMbF3aVS8KfrDc3N38GN+tTxCsaRgkfxhzLgtrgZN2hIWNUUzpAd7smCF5TdcPWfNMUNcggo0ft8rkfF9HsWmAZdntiJm7foWFjBOsA263E25WyJwCmPBy2ZfS6Pog8NFwe8nk3jAa0mk/KkdtPF5Hx/Wguo1L323bB4+7CMx9MEknwSPSJMXKYBfT9CFZ5xevq8GIEXvPmq4/ecCsv+Mn7VQa30lyvn9fQ0UC/Iz1vjh/ZdGixKpnf8JoBNgnCDAfHSBNJpN2olrkmtUXtmcTqDiIp1pBo3EftBDYJCDvD30TsDW316se/jySJrfESqI2i4iFeyZAXO+ZnhulVMGGvALjURnH6rN7CQohfwM0MJPUwoKEoOWgPvJbmRvXBcEBHlnPpEBgerwtj4ezNgd/GA0sf31su9gjmVUHtlOOdMtt4KnF+6VjB9kagAHRrxU5QXD/RyNo12z4WtSqF6Xt+93N7fflNKsw3qurjrR4D2PcFsuNkshpQWQCShCjk59BkPquC07JNsVwVdoPe07DH1GvSx+h2Kqanu0jGPD9oE0V525NT6/nRGLzQigElmvXnVotlZ13yUgaHm9higbS9eIYq3+RHgMI2w64mOAAVG2bvBOUBjTDXmjXbKIQp0TpRTiB7/BXZJrUXA9Bdh05RxffAiIloVmgrw1Qx7YX+bbFGwZN3sWJkZ7F25dia22UEMAkAauAa05Qt/ipE2hsUEXCa6iQTWphj4oFeKvd2p2ABgU9LKUT2a4HcoNzP7Y05o319PbXXRmRujvHhRaNXUt3tiIZNr0/Ku9Bkpojhya36kRIIkSFWSXF5zYABKYCxUEGDwdYvNW4v2f+MR5QRO4PgrTtYJc+XDLu0W4wXm1+jn54ffX96vq09Jpjmt5e6RXReYzsUPWq5R531dCS7+PpSpdWrHEgg5jEWD+BU+Rt4hNcxqaemG/ak4njAAKO00pT6jjNbXKpcTs3KAfjIheIwnB0PVMmKkF2Czt7io507HzjBm6WCb/gvaJ34KtoKAzfiiZoYTC0o3bj6MUTKEwp46GZhvzZhNcw6Z6n+KggMRfjsYA83Mecc3RCBr7LmypbWVtW9JesZU/616hjC2AWuwXcYntUcxSBmmVGyURokubPjFRC6/9YSrCFPYXN9qx1eY5aIByet4NRkB1m/VHUFlu0K6KXvqYH6V8hAbpt6BinB54jpLtngBmWabDLPEE1NxqSCZJiGAAEg8KEO9jHUeTIJW5kQc+4yAqekF6VdlLlZiC8FSKJox3Z4t0b/elGYbZRMUqqXxjoFHw+kDIIWrjC7VFDAk+sh1MHoNgTS7KG9LKZMulSm6aax7wRVrkhD4hg7Pp12hRj970BySF5Yeyi6dW/Z8gwdLWy9D1T9dbUzWRpv3dgvQy192gvtGA0bymwopExv/DRuKnSWuF6qmmOaier+rrvVAozru8AiXTmjv7NJFY0ApCziRraLu6a7Kofo51PQ9wKEhUq9Ty0qlN9p94BEul4c1Me5deMzn5n+YvZ2Zl5CRy5JIZYwfX575C2/VenrnG6wUhxq3qr5iuGeeK6/vsEwaoHnOnWnrQQQsoobrsNbCG2hNYAH2c65bYTgfMHBjqOPd6Ov057iamt+XHjQ5xLFb97ttzDv0luym2n3lCXCGmbqv9rtRqShxUtgKVGbixCYrjzOpN/nnQq4nTmZXKCi58WPhlpDKBcixMtNm1iqT4kyWvOUZT453S/trcSaBE4Ls840O7N3F8bQ+Ao+/0cnTqGKiDf2DkahhRNLXkUrSgKZGJgG9hicCJD3Ji8sBxfurEqh8RH3nueepXrxifYldoMcwRom8vwHVosic+y5up+kxbnRzjOowi4pm5DfmUwCIp7JLoQOKNT2nUAdyuMI7eN+1LG7XyTBoE75lpmDlKAMx4xfN/eE77HWyFJcsQi9Q0KpwtpOppgfIeNtcDAOLotKW4PiH6Ax8llK/RCL1bbUWaQ+LSLtkfbz+94HrBSSR3bVNcHAb2IXNCamaC4VWCsKPuzTgETxkwIuVQ/YpN7quUGjU/o51dKTGO9uSMiHDvkRj2qBRg2O/XUruq4ab471S9Y0k7ryB34ckyVjYUPOBTUWIBSAJC4WT8kSekFX0u+tLyY5gz5qz6rTMHNqrS9QS6NcwR8iJTgFr0xILKme2rzjry8iSSKTMhFnMTtXsF27tkWdYeFq23RZeIHk/yEKtCTwCRYJ5xZBwwCYYBqtKCDUJFYqgylo7bTlV5BMgSdKMk50KVGD/4bwiGkX+hrrJucIrfYGJpI6dQoPw/2Mb8ugbs9hxzhokLcA+zguMALZshs41B6Rd/jOhWW24qd9iJMW+bcpS25gz6JMkoQ6tFdqdVSdu/3ULW8aX9QGapuCVqzKjwsp7ACWEaUdc3dCZ8yJy7lQehKeV9tNbaGTRkjGioZJTc/EVoXpYd36Ds5XhnFaOQ8A+BwojZln0gwI/LvayGy7hs2fuy4FFZanmXqJrgcXnlRrag76F5lClSgoiFhsjwzyN9nXjccskQhioEkF0xDafjooEasSfZowsxNZjwKw8UxY17GowwnqpLYbSsjT/HOctOry5EBP+06tsVRlaV3LMbbVPa9pIsXqITex65Pru2S+0CQiIgSiNyNnpPWNqoe20K2yJrBIstESgBQyXjWnD2UJLIBWzNUY/BLBW/RQH/Oe0N7I2QdhhBWOWlnO5FlRyE3bayVr1XUKC3G14w5HM+rO6gwLM6e7Iba+vg4FBgvHtdx1V+uXAOasiG2oFYHcewUfwXiCCDfRTgsskU4X1a2ZRIXdrjem4Y0n21qrmF92hO0na9waXJqZlLXoVvGNwqNpBtg7+wQZR6pQVwUK2NjuVEbX7dpIUZ2KgdXN7Em8SNAuIiI8SlC74bmRYhDYtA7mM+EFwqs5HgoRm/aVteAMDt0dwuM6KJPYtnTIt7C20WX4lATVDCkEj6ZmZkWrbgwBHEL6EJkHkFp10ifQsD9jROpwIEPZf6JIVsoKi52DeFULaZ3E0cGtNannV+GT9Hh26ZZXdMuTVcKl6YBdmeKFHGoZHDRUyXrIom/tcp1MXILgJnijNUlzV5lLbN20HdPKTcXI79oRIRDy+DotG7kUcgT/U5zPA2EJMqnIkRMFuxtUwEQ4vvFvw3K4pkz0a+M4Q7i6HwCAm+9pBuqP4gs7eHuc2gxWSJ40jwD3Mf1XTQ8TAbEyvLIGuVR2aTVUX/isNVZA/xKwSi10AzFUeWNqcwQkvs1zrCmg/YBxtPhudC6goQFB//tZAu4YqVCJSvIDHx6j2IZinvYekcY8tHiL/4ssB6cIOWv/KeNwWNhviqiZdrPbWv3l6ls0ByCxJ6BhExiWhk6OA/K+RtJ9sSRtcj3GyMD5CbhVVyKsX0yF7lyRbAIoCjSR5VhQJYHtW0c4eAbCImOC8FH8JT24b/Zl3nzrGLpB0RMsV40bfil6ZHtkDQHynwtaTYUjUPsi0qz7akVbcpmCpKhzM80aCoH35KoZmOVHzBSXxoC3bs4Rj0jEVIdOhwgdEU3Gn/Offt+fiVIOhj3ht60tIqI5i+Nig9ubkhjxllRpRE5c+3wMj/LVeFfEOPosusPADFHaRJQJH7x9AbZWspCOeDTaLmp7GLaoCA3NRSv9ttP65UgCchznAk0/RjiPpBhwyN/WnCUz1YiUpBI9lozxwrFxs335EviyJVsmoHfkuL8GH4Tfpfugw2Q6Dwk3Ag3KnyStFGSvP28Xgl0hycFpnLoLbICYEZsqoOwKK4LKWyDl7V14myQsjaVHYQkzoqIBfqqFLgdxDjQfFwCdQ468cR7xGrqhJjTjQs9q3ZQeJM3tzdlSIyI7/3UJ9AIYHa1bpJziYzi0Sg8q+Bs2+xkqfH8jvnDPCMrHO2rHsRurkCJRUBs4E5QTU0dPTgtNx2Um1JiCr/pvz0k5cFjKz6vrMAo0xN7wAyUS4dAzOJyE9IduSLmpKEauEDPw53kZznQMz4HCVoNHinWQ6skFSeWPqE3p1FAPVw0L7sRQPLGrusM2eSsT+UUqUw+TjsyotBP+VWuU0MI8togUC/glGptiMOJiqpRGNKJfMfZ5crHCDds8LkAkhcnsH0GEDIT44Ne8Quaw0m84g++D2HEFZYSyyKI2QEDreepMhGMduqYS0bKrrBGFRPafvrofOQawwgi8sViH4Bh++K7lHGD86XgnCgJdNI8Mwveb1wyL1Ss8obZo3kkOGQrKDBKaygiaaH7yvdxj7hHa2JsveVaUWYs8HtsjoUR1EjK3NhvdUQjxa3aXfZocJCBIS0dHTb8XDmJJG7vFphkD6KF6L1VST1CPywtpCcScsq9EG8w1XCGed9Cg8DSusQh2LRmlOTYg+e945APG2JKMU7JOBnSDT21ZIWjHplNaomCIyYmUau44SHuJ+P776xKZISav5VdBiGCoakfSIkq1jO9PCAUtE1HXf9B+kU7EQlqEtd3Yk+Tm6TBAdfpGj6Gy8ghXtJCwatlcyLi94L77kedUrYztdzUf+c+IJhO9LIqCmFj0hMjNAzjPqMidMOCxyIwxaMhkSRRGi+RRJgCUp6KSyYryevjZQDaI/KTRDWWhg+poQ4LZbAi8kvlVi3Hi/beu/5qD8N0mc0pUAgHXoPPnjYyu1/8eBQlGSQ++FC5+cT4JmbZ4A1fXGdqWtsBmywdPXbPn6r2AmSGHbddKopvNOL2u1XJZ5eCBRySbIiMyE9FGFIcjcBANo5KbAucECm/xKAax0f9NuU52FQBsywo+c3m+wW4+oYQO4Zh0NrhNMGKSCyYhWDBcQK96LaRys/v3T8HZyNsRMRoRZT3QzbhG4hjjqKybmujCeWXJBrIWN1qmq5xyZqACnmqRAX/GY0D8NwwH8OTf8SNaFswXZAEjbx2RQYH740ICg6qA6z4cDmtDA4138qAXK/yFQEnRWoyMwDlod0qEVMWnYbnLGJ0sQ9s4UgflwX6nuuzqWe28qXs7BgHMbBI6Qedd631ZaqHoQ/Myxll8tntjLfhaqOpdJYReY5SBxMshFY8hOaYmCaa63yDGyt9LMR3NV9wXSwtd4qjFPenZsSn2wI6717bSj65lJQa4Sx5nkOnWalpAwj6RfHQwSOmkXUA6/sxOZpTgAhhdKSDKoIyKVw3bWkFHKUOzUCzyaFU0zQCwfszCUJiO8QhGPqrTClRhPPZM3urd7RykWkEQ8peN3DZRb2ESNOQrRoPniLhiC1SlModiSXUjrK+hS/NVAauApIWLsxS5ZSWVqxIO25pyJpEolDaT8HHKNzUjlNWO0aQkHqhmIZi5DjBNU7BfWM0FImTI1F04Gfu2LsDIiQuZKTZaZyrqRW8JjCqfjJ7j0S2n3bantpJ+nPhtE6E1oedFEqppYiFYegfAJ8ld4nzU8xM/L67TyJ9h/QcevCWV54mBxs5d/NszcoiSOb6lWBUfDTemT2JEI7GyCityCoaEmPuIdNO5V1JyKBV48gf1V7Zm6yAGZpb2qrvsxGkc97dc5Tu5P35UPiCn3M28N+ZzxrTkIj3KJQvUFM4KrtF8yhTlyMWlR+r5VUHswGq6LTJWdPTXWheG8bcdWbFu1/s+TZ9xncWHOGEIW+lkM1ClDF5kg5mFE0jQHeftSkGBZP56xqfOvmKe19KrgqhqDUJnGWvxpiyzztglBPyyrFYoD0JnrzBiyBZJSYGuAeYTsPMSOy9osrWKC5YxtxkQlEyQALicrD/zLfXEBJwTQOJs69xKg35mkVyRRUBfpqf4ORCICHyeclKjPWDRPhUARUnEHd2yibxdQTRPa/GvHqZQlw/XVInw+CnEU8+7f3lSzGWjOEXKN7V9SgX4H3LTuI6kquw3//myHWDhG9SC+e+VwTJCtYRvojcd3eY15789w+r1p0cDcnTtu/Ndkxpzj1cKWWS+6TF6XWzBmm4Ua9uXXrY6+a9onv5tl/j/CPjcXecfWDcn2ot3Rt/O9SAHHZ769ES9UXKrFnY5Ay7kWSDLA0v/+tb9olK4Zv4fnnn425hq058p7sWzbhnIRk2c9I7iozzLnpjuO6MS8bNbFDfCsM/zDubApfoYzjHf8p8UNxO7ptGTVN+FftLNlH5r0Myn77pywcOyI4PC+J/2GxmLDDIPqH6wzIAh73D8kmfhGRl9GIvQI8G2KKvx14YUrPX7WbDH1ea32Y/Mi5jgF8qCEqvjN8KyXmRkzYeZ1fbrRR1Z/b6uDh++My3ZvaRcf6R5tQ+v93euJf/hur7uepWl/5qf34d6e1rjjeOPiCZoZUHWetHH5DM0DtPkmwCfUAyQx+QzNA712FvAn2k1GboQ3Bm6MMIz9AKdjlcd3rTdfybSSsuXfigD/qgD/qgDab/B7x+xFYO3Jj+AAAAAElFTkSuQmCC" alt="Daylight Sneaker Co." style="height:92px;width:auto;display:block"></div>
+        <p style="margin:10px 0 0;font-size:14px;line-height:1.6;color:#8B8983;max-width:30ch">Sneaker retail out of South Africa. Real pairs, real photos, a real person on the other end of the chat.</p>
+      </div>
+    </div>
+    <div style="display:flex;justify-content:space-between;padding-top:18px;font-size:13px;color:#6E6C66">
+      <span>South Africa · hello@daylight.co.za</span>
+      <span>Layout prototype, 2026</span>
+    </div>
+  </div>
+
+  <sc-if value="{{ bagOpen }}" hint-placeholder-val="{{ false }}">
+    <div>
+      <div onClick="{{ closeBag }}" style="position:fixed;inset:0;background:rgba(10,10,10,.45);z-index:60"></div>
+      <div style="position:fixed;top:0;right:0;bottom:0;width:420px;background:#fff;z-index:70;display:flex;flex-direction:column;box-shadow:-20px 0 60px rgba(0,0,0,.2)">
+        <div style="display:flex;justify-content:space-between;align-items:center;padding:20px 22px;border-bottom:1px solid #EDEDED">
+          <div style="font-size:20px;font-weight:800">Your bag ({{ bagCount }})</div>
+          <button onClick="{{ closeBag }}" style="border:0;background:none;font-size:20px;cursor:pointer">×</button>
+        </div>
+        <div style="flex:1;overflow-y:auto;padding:16px 22px;display:flex;flex-direction:column;gap:16px">
+          <sc-for list="{{ bagItems }}" as="b" hint-placeholder-count="0">
+            <div style="display:grid;grid-template-columns:78px 1fr;gap:14px;padding-bottom:16px;border-bottom:1px solid #F0F0F0">
+              <div style="background:{{ b.plate }};height:66px;position:relative;overflow:hidden">
+                <img data-photo="{{ b.src }}" alt="" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:block">
+              </div>
+              <div>
+                <div style="display:flex;justify-content:space-between;gap:10px">
+                  <div>
+                    <div style="font-size:15px;font-weight:800">{{ b.model }}</div>
+                    <div style="font-size:13px;color:#6E6C66;margin-top:2px">{{ b.meta }}</div>
+                  </div>
+                  <div style="font-size:15px;font-weight:700">{{ b.lineTotal }}</div>
+                </div>
+                <div style="display:flex;align-items:center;gap:12px;margin-top:10px">
+                  <div style="display:flex;align-items:center;border:1px solid #DEDEDE">
+                    <button onClick="{{ b.onDec }}" style="border:0;background:none;padding:6px 11px;font-size:15px;cursor:pointer">−</button>
+                    <span style="font-size:14px;font-weight:700;min-width:18px;text-align:center">{{ b.qty }}</span>
+                    <button onClick="{{ b.onInc }}" style="border:0;background:none;padding:6px 11px;font-size:15px;cursor:pointer">+</button>
+                  </div>
+                  <button onClick="{{ b.onRemove }}" style="border:0;background:none;font-size:13px;color:#8B8983;text-decoration:underline;cursor:pointer;padding:0">Remove</button>
+                </div>
+              </div>
+            </div>
+          </sc-for>
+          <sc-if value="{{ bagEmpty }}" hint-placeholder-val="{{ false }}">
+            <div style="padding:40px 0;text-align:center">
+              <div style="font-size:17px;font-weight:800">Nothing in the bag yet</div>
+              <p style="margin:8px 0 18px;font-size:14px;color:#6E6C66">Eight pairs are photographed and ready to ship.</p>
+              <button onClick="{{ goAll }}" style="background:#0E0E0E;color:#fff;border:0;border-radius:999px;padding:13px 24px;font-size:14px;font-weight:700;cursor:pointer">Start shopping</button>
+            </div>
+          </sc-if>
+        </div>
+        <sc-if value="{{ bagHasItems }}" hint-placeholder-val="{{ false }}">
+          <div style="border-top:1px solid #EDEDED;padding:18px 22px 22px">
+            <div style="display:flex;justify-content:space-between;font-size:14px"><span style="color:#6E6C66">Subtotal</span><span style="font-weight:700">{{ subtotalText }}</span></div>
+            <div style="display:flex;justify-content:space-between;font-size:14px;margin-top:7px"><span style="color:#6E6C66">Courier</span><span style="font-weight:700">{{ courierPreview }}</span></div>
+            <div style="font-size:13px;color:#8B8983;margin-top:8px">{{ freeShipNote }}</div>
+            <button onClick="{{ goCheckout }}" style="width:100%;margin-top:14px;background:#0E0E0E;color:#fff;border:0;border-radius:999px;padding:16px;font-size:15px;font-weight:800;cursor:pointer">Checkout</button>
+          </div>
+        </sc-if>
+      </div>
+    </div>
+  </sc-if>
+
+  <sc-if value="{{ toast }}" hint-placeholder-val="{{ false }}">
+    <div style="position:fixed;left:50%;bottom:28px;transform:translateX(-50%);background:#0E0E0E;color:#fff;padding:14px 22px;font-size:14px;font-weight:600;z-index:90;box-shadow:0 18px 40px rgba(0,0,0,.25)">{{ toast }}</div>
+  </sc-if>
+</div>
+
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:1440,&quot;height&quot;:2600}}">
+const BG = {IMG_4352:"#F4F4F4",IMG_4353:"#F4F4F4",IMG_4354:"#FFFFFF",IMG_4355:"#FFFFFF",IMG_4356:"#FFFFFF",IMG_4357:"#FFFFFF",IMG_4359:"#F3F3F3",IMG_4360:"#EEEEEE",IMG_4361:"#EEEEEE",IMG_4362:"#EEEEEE",IMG_4363:"#EEEEEE",IMG_4364:"#EFEFEF",IMG_4365:"#ECEFEC",IMG_4366:"#F6F6F6",IMG_4367:"#F6F6F6",IMG_4368:"#F6F6F6",IMG_4369:"#F6F6F6",IMG_4370:"#F6F6F6",IMG_4372:"#8F8D72",IMG_4374:"#8A7F8C"};
+const ALL_SIZES = [4, 5, 6, 7, 8, 9, 10, 11, 12];
+const DATA = [
+  {id:0,brand:"Nike",model:"Shox R4",colorway:"Metallic Silver",price:2999,was:null,tag:"Just in",gender:"Men",fit:"contain",sizes:[4,5,6,7,8,9,10,11,12],shots:["IMG_4367","IMG_4366","IMG_4369","IMG_4370","IMG_4368"]},
+  {id:1,brand:"Nike",model:"Air Max 95",colorway:"Fresh Mint",price:3299,was:null,tag:"Just in",gender:"Women",fit:"contain",sizes:[5,6,7,8,9,10,11],shots:["IMG_4359"]},
+  {id:2,brand:"Nike",model:"P-6000",colorway:"Butter Yellow",price:2799,was:3199,tag:"Reduced",gender:"Women",fit:"cover",sizes:[4,5,6,7,8,9,10,11],shots:["IMG_4372"]},
+  {id:3,brand:"Nike",model:"Shox TL",colorway:"Triple Black",price:3599,was:null,tag:"Just in",gender:"Men",fit:"contain",sizes:[6,7,8,9,10,11,12],shots:["IMG_4354","IMG_4356","IMG_4357","IMG_4355"]},
+  {id:4,brand:"Nike",model:"P-6000",colorway:"Light Bone",price:2799,was:null,tag:"Low stock",gender:"Women",fit:"contain",sizes:[7,8,9],shots:["IMG_4352"]},
+  {id:5,brand:"Nike",model:"Air Max 95",colorway:"Midnight Navy",price:3299,was:3699,tag:"Reduced",gender:"Men",fit:"contain",sizes:[5,6,7,8,9,10,11,12],shots:["IMG_4353"]},
+  {id:6,brand:"Nike",model:"V2K Run",colorway:"Summit Cream",price:2899,was:null,tag:"Just in",gender:"Women",fit:"cover",sizes:[4,5,6,7,8,9,10],shots:["IMG_4374"]},
+  {id:7,brand:"Nike",model:"Free Metcon 6",colorway:"Racer Blue",price:2499,was:null,tag:"Just in",gender:"Men",fit:"contain",sizes:[4,6,7,8,9,10,11,12],shots:["IMG_4360","IMG_4361","IMG_4363","IMG_4362","IMG_4365","IMG_4364"]}
+];
+const R = n => "R" + n.toLocaleString("en-ZA").replace(/,/g, " ");
+const TAG = {Reduced: ["#E01E00", "#fff"], "Low stock": ["#E6FF00", "#0E0E0E"]};
+const FREE_OVER = 2500, COURIER = 120;
+const src = k => "images/" + k + ".webp";
+const plate = k => BG[k] || "#F5F5F5";
+
+class Component extends DCLogic {
+  state = {
+    view: "home", filter: "All", sort: "Newest first", query: "",
+    productId: 0, shotIndex: 0, size: null,
+    bag: [], bagOpen: false, toast: "",
+    delivery: "courier", payment: "Card or instant EFT",
+    form: {name: "", phone: "", address: "", city: "", postcode: "", note: ""},
+    errors: {}, ref: "", copied: false, trackRef: "", trackNote: "Use the reference from your confirmation, or ask in the chat and we will find it."
+  };
+
+  componentDidMount() { this.attach(); }
+  componentDidUpdate() { this.attach(); }
+  attach() {
+    document.querySelectorAll("img[data-photo]").forEach(el => {
+      const url = el.getAttribute("data-photo");
+      if (url && !url.includes("{{") && el.getAttribute("src") !== url) el.setAttribute("src", url);
+    });
+  }
+
+  go(view, extra) { this.setState(Object.assign({view, bagOpen: false}, extra || {})); window.scrollTo(0, 0); }
+  flash(msg) { this.setState({toast: msg}); clearTimeout(this._t); this._t = setTimeout(() => this.setState({toast: ""}), 2600); }
+  open(id) { this.go("product", {productId: id, shotIndex: 0, size: null}); }
+
+  subtotal() { return this.state.bag.reduce((n, i) => n + DATA[i.id].price * i.qty, 0); }
+  deliveryCost() {
+    if (this.state.delivery === "collect") return 0;
+    return this.subtotal() >= FREE_OVER ? 0 : COURIER;
+  }
+  message() {
+    const lines = this.state.bag.map(i => {
+      const p = DATA[i.id];
+      return "• " + p.brand + " " + p.model + " — " + p.colorway + "\n  UK " + i.size + " ×" + i.qty + "  " + R(p.price * i.qty);
+    }).join("\n");
+    const f = this.state.form;
+    return "Hi Daylight! I'd like to order:\n\n" + lines +
+      "\n\nSubtotal: " + R(this.subtotal()) +
+      "\n" + (this.state.delivery === "collect" ? "Collection: Braamfontein" : "Courier: " + (this.deliveryCost() ? R(this.deliveryCost()) : "Free")) +
+      "\nTotal: " + R(this.subtotal() + this.deliveryCost()) +
+      "\n\n" + (f.name || "—") + " · " + (f.phone || "—") +
+      "\nRef: " + (this.state.ref || "pending");
+  }
+
+  addToBag() {
+    const p = DATA[this.state.productId], size = this.state.size;
+    if (!size) { this.flash("Pick a UK size first"); return; }
+    const bag = this.state.bag.slice();
+    const hit = bag.findIndex(i => i.id === p.id && i.size === size);
+    if (hit > -1) bag[hit] = Object.assign({}, bag[hit], {qty: bag[hit].qty + 1});
+    else bag.push({id: p.id, size, qty: 1});
+    this.setState({bag, bagOpen: true});
+    this.flash(p.model + " UK " + size + " added");
+  }
+  qty(ix, d) {
+    const bag = this.state.bag.slice();
+    const next = bag[ix].qty + d;
+    if (next < 1) bag.splice(ix, 1); else bag[ix] = Object.assign({}, bag[ix], {qty: next});
+    this.setState({bag});
+  }
+  remove(ix) { const bag = this.state.bag.slice(); bag.splice(ix, 1); this.setState({bag}); }
+  setField(k, v) { this.setState({form: Object.assign({}, this.state.form, {[k]: v})}); }
+
+  placeOrder() {
+    const f = this.state.form, errors = {};
+    if (!f.name.trim()) errors.name = "We need a name for the courier";
+    if (!/[0-9]{9,}/.test(f.phone.replace(/\D/g, ""))) errors.phone = "A working mobile number, please";
+    if (this.state.delivery === "courier") {
+      if (!f.address.trim()) errors.address = "Street address is required";
+      if (!f.city.trim()) errors.city = "Which city?";
+    }
+    if (Object.keys(errors).length) { this.setState({errors}); this.flash("A few details are missing"); return; }
+    const ref = "DL-" + (4000 + Math.floor(Math.random() * 5000));
+    this.setState({errors: {}, ref, trackRef: ref, copied: false});
+    this.go("confirm", {ref, trackRef: ref});
+  }
+
+  renderVals() {
+    const s = this.state, p = DATA[s.productId];
+    const tile = d => {
+      const [tagBg, tagInk] = TAG[d.tag] || ["#0E0E0E", "#fff"];
+      return {
+        model: d.model, colorway: d.colorway, src: src(d.shots[0]), plate: plate(d.shots[0]), fit: d.fit,
+        tag: d.tag, tagBg, tagInk, stockNote: d.sizes.length + " UK sizes left",
+        priceText: R(d.price), wasText: d.was ? R(d.was) : "", priceColor: d.was ? "#E01E00" : "#0E0E0E",
+        onOpen: () => this.open(d.id)
+      };
+    };
+
+    let list = DATA.filter(d => {
+      if (s.filter === "Reduced") return !!d.was;
+      if (s.filter === "Men" || s.filter === "Women") return d.gender === s.filter;
+      if (s.filter === "Under R3 000") return d.price < 3000;
+      if (s.filter === "Nike") return d.brand === "Nike";
+      if (s.filter === "Sizes 9+") return d.sizes.includes(9);
+      return true;
+    });
+    if (s.query.trim()) {
+      const q = s.query.toLowerCase();
+      list = list.filter(d => (d.model + " " + d.colorway + " " + d.brand).toLowerCase().includes(q));
+    }
+    if (s.sort === "Price: low to high") list = list.slice().sort((a, b) => a.price - b.price);
+    if (s.sort === "Price: high to low") list = list.slice().sort((a, b) => b.price - a.price);
+
+    const [ptagBg, ptagInk] = TAG[p.tag] || ["#0E0E0E", "#fff"];
+    const sub = this.subtotal(), del = this.deliveryCost(), f = s.form;
+    const field = (k, label, placeholder, span) => ({
+      label, placeholder, span: span || 1, value: f[k], error: s.errors[k] || "",
+      border: s.errors[k] ? "#E01E00" : "#DEDEDE",
+      onChange: e => this.setField(k, e.target.value)
+    });
+    const pick = (on) => ({border: on ? "#0E0E0E" : "#DEDEDE", bg: on ? "#F7F7F5" : "#fff"});
+    const timelineAt = s.ref ? 1 : 0;
+    const stages = [
+      ["Order received", "Just now", "Your order and reference landed in the shop's WhatsApp."],
+      ["Size confirmed", "Within the hour", "We check the pair is physically in the room, then send a payment link."],
+      ["Packed and collected", "Same or next day", "Inspected once more, boxed, handed to the courier."],
+      ["Out for delivery", "Within 48 hours", "Tracking number comes back to the same chat."]
+    ];
+
+    return {
+      isHome: s.view === "home", isList: s.view === "list", isProduct: s.view === "product",
+      isCheckout: s.view === "checkout", isConfirm: s.view === "confirm", isTrack: s.view === "track", isHelp: s.view === "help",
+      goHome: () => this.go("home"), goHelp: () => this.go("help"), goTrack: () => this.go("track"),
+      goAll: () => this.go("list", {filter: "All"}), goMen: () => this.go("list", {filter: "Men"}),
+      goWomen: () => this.go("list", {filter: "Women"}), goBrands: () => this.go("list", {filter: "Nike"}),
+      goSale: () => this.go("list", {filter: "Reduced"}),
+      goCheckout: () => { if (!s.bag.length) { this.flash("Your bag is empty"); return; } this.go("checkout"); },
+      openHeroProduct: () => this.open(2),
+      tabAll: s.view === "list" ? "#0E0E0E" : "transparent",
+      query: s.query, onQuery: e => this.setState({query: e.target.value, view: e.target.value ? "list" : s.view}),
+      openBag: () => this.setState({bagOpen: true}), closeBag: () => this.setState({bagOpen: false}),
+      bagOpen: s.bagOpen, bagCount: s.bag.reduce((n, i) => n + i.qty, 0),
+      bagEmpty: s.bag.length === 0, bagHasItems: s.bag.length > 0, toast: s.toast,
+
+      categories: [
+        {label: "Runners & retros", src: src("IMG_4352"), onOpen: () => this.go("list", {filter: "All"})},
+        {label: "Chunky & tech", src: src("IMG_4354"), onOpen: () => this.open(3)},
+        {label: "Everyday cream", src: src("IMG_4374"), onOpen: () => this.open(6)}
+      ],
+      homeRail: DATA.slice(0, 4).map(tile),
+      steps: [
+        {n: "01", title: "Reserve your size", body: "The size grid only shows what is physically in the room today."},
+        {n: "02", title: "Order lands in WhatsApp", body: "Pre-typed with sizes, totals and a reference number."},
+        {n: "03", title: "Pay however suits", body: "Card, instant EFT, or sort it out in the chat before anything ships."}
+      ],
+
+      listTitle: s.filter === "All" ? "New in" : s.filter === "Nike" ? "Nike" : s.filter,
+      listCount: list.length + " of 8 photographed pairs" + (s.query ? " matching “" + s.query + "”" : ""),
+      listEmpty: list.length === 0,
+      listTiles: list.map(tile),
+      sort: s.sort, onSort: e => this.setState({sort: e.target.value}),
+      clearFilters: () => this.setState({filter: "All", query: ""}),
+      chips: ["All", "Nike", "Men", "Women", "Reduced", "Under R3 000", "Sizes 9+"].map(label => {
+        const on = s.filter === label;
+        return {label, bg: on ? "#0E0E0E" : "#fff", ink: on ? "#fff" : "#0E0E0E",
+          border: on ? "#0E0E0E" : "#DEDEDE", onPick: () => this.setState({filter: label})};
+      }),
+
+      p: {
+        brand: p.brand, model: p.model, colorway: p.colorway, fit: p.fit,
+        priceText: R(p.price), wasText: p.was ? R(p.was) : "", priceColor: p.was ? "#E01E00" : "#0E0E0E",
+        tag: p.tag, tagBg: ptagBg, tagInk: ptagInk,
+        mainSrc: src(p.shots[Math.min(s.shotIndex, p.shots.length - 1)]),
+        mainPlate: plate(p.shots[Math.min(s.shotIndex, p.shots.length - 1)]),
+        shots: p.shots.map((k, i) => ({src: src(k), plate: plate(k),
+          border: i === s.shotIndex ? "#0E0E0E" : "#EDEDED", onPick: () => this.setState({shotIndex: i})})),
+        shotNote: p.shots.length > 1 ? p.shots.length + " angles of this exact pair." : "Photographed on the floor upstairs.",
+        sizeGrid: ALL_SIZES.map(n => {
+          const has = p.sizes.includes(n), on = s.size === n;
+          return {label: "UK " + n, disabled: !has, cursor: has ? "pointer" : "not-allowed",
+            strike: has ? "none" : "line-through",
+            border: on ? "#0E0E0E" : "#DEDEDE", bg: on ? "#0E0E0E" : "#fff",
+            ink: on ? "#fff" : has ? "#0E0E0E" : "#BEBEB8",
+            onPick: () => has && this.setState({size: n})};
+        }),
+        sizeHint: (() => {
+          if (s.size) return "UK " + s.size + " is in the room — we hold it for two hours once you add it.";
+          const gone = ALL_SIZES.length - p.sizes.length;
+          if (!gone) return "Every UK size is in the room on this pair.";
+          return gone === 1 ? "One size is sold out — the crossed-out size is gone."
+            : gone + " sizes are sold out. Crossed-out sizes are gone.";
+        })(),
+        hintColor: s.size ? "#1D7A3D" : "#6E6C66"
+      },
+      addToBag: () => this.addToBag(),
+      reserveOnChat: () => this.flash("Opening WhatsApp with this pair attached…"),
+      productFacts: [
+        {k: "Condition", v: "Brand new, in box"},
+        {k: "Sizing", v: "UK, true to size"},
+        {k: "Delivery", v: sub >= FREE_OVER ? "Free, 48 hours" : R(COURIER) + ", 48 hours"},
+        {k: "Returns", v: "14 days, unworn"}
+      ],
+      related: DATA.filter(d => d.id !== p.id).slice(0, 4).map(tile),
+
+      bagItems: s.bag.map((i, ix) => {
+        const d = DATA[i.id];
+        return {model: d.model, meta: d.colorway + " · UK " + i.size, qty: i.qty,
+          src: src(d.shots[0]), plate: plate(d.shots[0]), lineTotal: R(d.price * i.qty),
+          onInc: () => this.qty(ix, 1), onDec: () => this.qty(ix, -1), onRemove: () => this.remove(ix)};
+      }),
+      subtotalText: R(sub),
+      courierPreview: sub >= FREE_OVER ? "Free" : R(COURIER),
+      freeShipNote: sub >= FREE_OVER ? "Delivery is on us on this order." : "Add " + R(FREE_OVER - sub) + " more for free delivery.",
+      deliveryLabel: s.delivery === "collect" ? "Collection" : "Courier",
+      deliveryText: del ? R(del) : "Free",
+      totalText: R(sub + del),
+      placeLabel: s.payment === "Card or instant EFT" ? "Pay " + R(sub + del) : "Send order to WhatsApp",
+
+      formFields: [
+        field("name", "Full name", "Thandi Mokoena", 1),
+        field("phone", "Mobile number", "082 000 0000", 1),
+        field("address", "Street address", "12 Juta Street, Braamfontein", 2),
+        field("city", "City", "Johannesburg", 1),
+        field("postcode", "Postal code", "2000", 1),
+        field("note", "Anything we should know?", "Buzzer is broken, call on arrival", 2)
+      ],
+      deliveryOptions: [
+        Object.assign({title: "Courier to your door", body: "Two working days to major centres, three to four outlying.",
+          cost: sub >= FREE_OVER ? "Free" : R(COURIER), onPick: () => this.setState({delivery: "courier"})}, pick(s.delivery === "courier")),
+        Object.assign({title: "Collect in Braamfontein", body: "Ready in two hours, weekdays until 5pm. Try the pair on here.",
+          cost: "Free", onPick: () => this.setState({delivery: "collect"})}, pick(s.delivery === "collect"))
+      ],
+      paymentOptions: ["Card or instant EFT", "Pay on WhatsApp", "Pay on collection"].map(title => Object.assign({
+        title,
+        body: title === "Card or instant EFT" ? "Secure link, charged once your size is confirmed."
+          : title === "Pay on WhatsApp" ? "We send banking details or a link in the chat."
+          : "Card or cash when you pick the pair up.",
+        note: title === s.payment ? "Selected" : "",
+        onPick: () => this.setState({payment: title})
+      }, pick(title === s.payment))),
+      placeOrder: () => this.placeOrder(),
+
+      ref: s.ref, firstName: (f.name.trim().split(" ")[0]) || "friend",
+      confirmLine: s.payment === "Card or instant EFT" ? "A payment link is on its way to " + (f.phone || "your phone") + "."
+        : s.payment === "Pay on collection" ? "Bring your reference to 12 Juta Street and the pair will be waiting."
+        : "We will send payment details in the chat.",
+      addressBlock: s.delivery === "collect" ? "Collection\n12 Juta Street\nBraamfontein, Johannesburg"
+        : [f.name, f.address, f.city, f.postcode].filter(Boolean).join("\n") || "—",
+      payLine: s.payment,
+      waMessage: this.message(),
+      replyLine: "Got it — checking that size now. Payment link coming through in a few minutes.",
+      copyLabel: s.copied ? "Copied to clipboard" : "Copy this message",
+      copyMessage: () => { this.setState({copied: true}); this.flash("Message copied"); },
+
+      trackRef: s.trackRef, onTrackRef: e => this.setState({trackRef: e.target.value}),
+      lookUp: () => this.setState({trackNote: s.trackRef && s.trackRef === s.ref
+        ? "Found it — status below is live."
+        : s.trackRef ? "No order under that reference yet. Check the confirmation message." : "Enter a reference first."}),
+      trackNote: s.trackNote,
+      hasOrder: !!s.ref,
+      orderSummaryLine: s.bag.length ? s.bag.reduce((n, i) => n + i.qty, 0) + " pair(s) · " + R(sub + del) : "Order complete",
+      timeline: stages.map((st, i) => ({
+        title: st[0], when: st[1], body: st[2],
+        dot: i <= timelineAt ? "#0E0E0E" : "#fff", ring: i <= timelineAt ? "#0E0E0E" : "#DEDEDE",
+        line: i < timelineAt ? "#0E0E0E" : "#EDEDED", lineH: i === stages.length - 1 ? "0px" : "48px",
+        ink: i <= timelineAt ? "#0E0E0E" : "#8B8983"
+      })),
+
+      assurances: [
+        {k: "Delivery", t: "48 hours, tracked", b: "Major centres in two working days, outlying areas in three to four. Tracking number lands in the same chat you ordered from."},
+        {k: "Returns", t: "14 days, unworn", b: "Wrong size happens. Message the shop, we book a collection slot and swap it — courier on us."},
+        {k: "Authenticity", t: "Checked twice", b: "Every pair is inspected and photographed here before it goes out. If anything looks off, it never reaches the site."},
+        {k: "Payment", t: "Card, EFT or chat", b: "Nothing is charged before we confirm your size is physically in the room."}
+      ],
+      footer: [
+        {h: "Shop", links: [{label: "New in", onGo: () => this.go("list", {filter: "All"})}, {label: "Men", onGo: () => this.go("list", {filter: "Men"})}, {label: "Women", onGo: () => this.go("list", {filter: "Women"})}, {label: "Sale", onGo: () => this.go("list", {filter: "Reduced"})}]},
+        {h: "Brands", links: [{label: "Nike", onGo: () => this.go("list", {filter: "All"})}, {label: "adidas", onGo: () => this.flash("adidas pairs are in the room, not photographed yet")}, {label: "Puma", onGo: () => this.flash("Puma pairs are in the room, not photographed yet")}, {label: "New Balance", onGo: () => this.flash("New Balance pairs are in the room, not photographed yet")}]},
+        {h: "Help", links: [{label: "Size guide", onGo: () => this.go("help")}, {label: "Delivery & returns", onGo: () => this.go("help")}, {label: "Track my order", onGo: () => this.go("track")}, {label: "Contact us", onGo: () => this.flash("WhatsApp: 083 000 0000")}]},
+        {h: "Daylight", links: [{label: "About us", onGo: () => this.go("help")}, {label: "Join free", onGo: () => this.go("help")}, {label: "Instagram", onGo: () => this.flash("@daylight.za")}, {label: "WhatsApp", onGo: () => this.flash("WhatsApp: 083 000 0000")}]}
+      ]
+    };
+  }
+}
+
+</script>
+</body>
+</html>
