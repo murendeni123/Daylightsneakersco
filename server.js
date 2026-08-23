@@ -102,55 +102,55 @@ function initDB() {
 
 function seedProducts() {
   const products = [
-    {brand:"Nike",model:"P-6000",colorway:"Dark Grey",price:2799,tag:"Just in",gender:"Unisex",fit:"contain",photos:["637cd05f-0f1b-450e-984d-3cbfc6d27002.JPG"],sizes:[4,5,6,7,8,9,10,11]},
-    {brand:"Nike",model:"P-6000",colorway:"White Pink",price:2799,tag:"Just in",gender:"Women",fit:"contain",photos:["5fd8e632-84ec-4042-91f0-529b569bd5a5.JPG"],sizes:[4,5,6,7,8,9,10]},
-    {brand:"Nike",model:"Air Force 1",colorway:"Triple White",price:2199,tag:"Just in",gender:"Unisex",fit:"contain",photos:["cd0246f8-ff10-4f2d-bb2a-e970871d1915.JPG","41797f25-5090-4239-886e-1a11576f7f12.JPG"],sizes:[4,5,6,7,8,9,10,11,12]},
-    {brand:"Nike",model:"Air Force 1",colorway:"Triple Black",price:2199,tag:"Just in",gender:"Unisex",fit:"contain",photos:["b9894cca-2d74-4eed-b0df-c56e8bcb358e.JPG"],sizes:[4,5,6,7,8,9,10,11,12]},
-    {brand:"Nike",model:"Air Force 1",colorway:"Love Letter",price:2499,tag:"Just in",gender:"Women",fit:"contain",photos:["9a620886-82dc-4cff-99b4-1a09e8629b8d.JPG"],sizes:[4,5,6,7,8,9,10]},
-    {brand:"Nike",model:"Air Force 1",colorway:"Pink Hearts",price:2499,tag:"Just in",gender:"Women",fit:"contain",photos:["8e83c8c3-c2ee-492e-80ed-d4dc65aa0d5e.JPG"],sizes:[4,5,6,7,8,9]},
-    {brand:"Nike",model:"Air Force 1",colorway:"Black Red",price:2199,tag:"Just in",gender:"Men",fit:"contain",photos:["96c48813-c599-48bd-af47-25c269512d37.JPG"],sizes:[6,7,8,9,10,11,12]},
-    {brand:"Nike",model:"Air Force 1",colorway:"Cream Gold Gum",price:2499,tag:"Just in",gender:"Women",fit:"contain",photos:["0254ca82-b551-4cbf-9c41-53a27dbac02e.JPG"],sizes:[4,5,6,7,8,9,10]},
-    {brand:"Nike",model:"Jordan 4",colorway:"Black Cat",price:3599,tag:"Just in",gender:"Men",fit:"contain",photos:["54dcd405-1251-463d-a76e-24413e89f9f4.JPG"],sizes:[6,7,8,9,10,11,12]},
-    {brand:"Nike",model:"Jordan 1 Low",colorway:"Bred Toe",price:2499,tag:"Just in",gender:"Unisex",fit:"contain",photos:["45cef18c-18cd-48ad-a127-d92cc496285b.JPG"],sizes:[4,5,6,7,8,9,10,11]},
-    {brand:"Nike",model:"Jordan 1 Mid",colorway:"Light Smoke Grey",price:2799,tag:"Just in",gender:"Men",fit:"contain",photos:["74e15e49-6492-49f8-9d01-ad976cf402d6.JPG"],sizes:[6,7,8,9,10,11,12]},
-    {brand:"Nike",model:"Dunk Low",colorway:"Purple Marble",price:2499,tag:"Just in",gender:"Women",fit:"contain",photos:["251d17df-3c2f-47cf-8606-7a46f506fcec.JPG"],sizes:[4,5,6,7,8,9,10]},
-    {brand:"Nike",model:"Dunk Low SB",colorway:"Grey Fog",price:2299,tag:"Just in",gender:"Unisex",fit:"contain",photos:["a7bbed38-c8fb-4162-8d15-c1292621a324.JPG"],sizes:[5,6,7,8,9,10,11]},
-    {brand:"Nike",model:"Dunk Low",colorway:"Industrial Blue Denim",price:2499,tag:"Just in",gender:"Unisex",fit:"contain",photos:["1a4166cd-e6b8-4799-b36b-f0be991d8176.JPG"],sizes:[5,6,7,8,9,10,11]},
-    {brand:"Nike",model:"Air Max 90",colorway:"Pink Grey",price:2699,tag:"Just in",gender:"Women",fit:"contain",photos:["b3471d73-3b0c-4e93-a703-a64703309efc.JPG"],sizes:[4,5,6,7,8,9]},
-    {brand:"Nike",model:"Air Max 90",colorway:"Wolf Grey",price:2699,tag:"Just in",gender:"Men",fit:"contain",photos:["5947b3e0-4c09-4fe0-86b9-6c70bc55c136.JPG","2f31e2ff-1fe5-425f-83ac-34b235b6c86f.JPG"],sizes:[6,7,8,9,10,11,12]},
-    {brand:"Nike",model:"Air Max 90",colorway:"Triple White",price:2699,tag:"Just in",gender:"Unisex",fit:"contain",photos:["68f1e03c-5b7b-4a49-b09e-d05c1d1f5ad2.JPG"],sizes:[4,5,6,7,8,9,10,11,12]},
-    {brand:"Nike",model:"Air Max Plus",colorway:"White Volt",price:3299,tag:"Just in",gender:"Men",fit:"contain",photos:["2b758f0e-b13f-4181-aae1-ed0f382079d8.JPG"],sizes:[6,7,8,9,10,11,12]},
-    {brand:"Nike",model:"Air Max Plus III",colorway:"White Navy",price:3299,tag:"Just in",gender:"Men",fit:"contain",photos:["171ffb9a-0c3d-42f8-a50d-5d965e85b42e.JPG"],sizes:[6,7,8,9,10,11,12]},
-    {brand:"Nike",model:"Air Max Plus",colorway:"Black Pink",price:3299,tag:"Just in",gender:"Women",fit:"contain",photos:["f8b3a647-8fa9-49f6-9362-62196dacbebc.JPG"],sizes:[4,5,6,7,8,9,10]},
-    {brand:"Nike",model:"Air Max Plus",colorway:"White Black",price:3299,tag:"Just in",gender:"Men",fit:"contain",photos:["abb3f0b2-41bb-47e0-8ad8-0c70375aca72.JPG"],sizes:[6,7,8,9,10,11,12]},
-    {brand:"Nike",model:"Air Max 97",colorway:"Pink Burgundy",price:3199,tag:"Just in",gender:"Women",fit:"contain",photos:["0f549c21-a59a-4105-88e0-970528d12bae.JPG"],sizes:[4,5,6,7,8,9,10]},
-    {brand:"Nike",model:"Air Max 97",colorway:"Rose Coral",price:3199,tag:"Just in",gender:"Women",fit:"contain",photos:["8713d139-4045-42aa-918a-d13004b4843c.JPG"],sizes:[4,5,6,7,8,9,10]},
-    {brand:"Nike",model:"Air Max 95",colorway:"Wolf Grey",price:3299,tag:"Just in",gender:"Men",fit:"contain",photos:["a1d28987-f86b-4756-af4b-8fd5f967ccf9.JPG"],sizes:[6,7,8,9,10,11,12]},
-    {brand:"Nike",model:"Air Max 1",colorway:"Grey Black",price:2999,tag:"Just in",gender:"Men",fit:"contain",photos:["a0c8f4be-d8f6-4062-82a0-39bab4fab3cd.JPG"],sizes:[6,7,8,9,10,11]},
-    {brand:"Nike",model:"Air Max Dn",colorway:"Pink Mauve",price:3499,tag:"Just in",gender:"Women",fit:"contain",photos:["42cd1844-fdd2-4d50-b861-2eca66ad8902.JPG"],sizes:[4,5,6,7,8,9,10]},
-    {brand:"Nike",model:"Shox TL",colorway:"White Silver",price:3599,tag:"Just in",gender:"Men",fit:"contain",photos:["07df58bf-e774-4157-927c-e5e83a0ad5c6.JPG"],sizes:[6,7,8,9,10,11,12]},
-    {brand:"Nike",model:"Shox TL",colorway:"Sunrise",price:3599,tag:"Just in",gender:"Men",fit:"contain",photos:["2ac12a6f-5afe-4932-a54e-df55c5e4bc2f.JPG"],sizes:[6,7,8,9,10,11,12]},
-    {brand:"Nike",model:"Shox TL",colorway:"Mauve Burgundy",price:3599,tag:"Just in",gender:"Women",fit:"contain",photos:["01be1cac-f8cc-4cb5-94ba-c1f1549b849f.JPG"],sizes:[4,5,6,7,8,9,10]},
-    {brand:"Nike",model:"NOCTA Hot Step",colorway:"Black White",price:3499,tag:"Just in",gender:"Men",fit:"contain",photos:["efb9c333-ae16-485b-93c1-5488acc61388.JPG"],sizes:[6,7,8,9,10,11,12]},
-    {brand:"Nike",model:"Vomero 5",colorway:"Silver Black",price:3299,tag:"Just in",gender:"Unisex",fit:"contain",photos:["44164576-d67f-4bfe-b0d5-7bd1e36046ad.JPG"],sizes:[5,6,7,8,9,10,11]},
-    {brand:"Nike",model:"ZoomX Streakfly",colorway:"White Turquoise",price:3499,tag:"Just in",gender:"Unisex",fit:"contain",photos:["86073d88-04c9-41a5-8427-d769ae34993a.JPG"],sizes:[5,6,7,8,9,10,11]},
-    {brand:"New Balance",model:"9060",colorway:"Crystal Pink",price:3299,tag:"Just in",gender:"Women",fit:"contain",photos:["9170e196-58bd-4366-b15d-01284b08ec92.JPG"],sizes:[4,5,6,7,8,9,10]},
-    {brand:"New Balance",model:"9060",colorway:"Burgundy Brown",price:3299,tag:"Just in",gender:"Unisex",fit:"contain",photos:["f137f44c-b0ec-47b1-8646-fe1828b423be.JPG"],sizes:[5,6,7,8,9,10,11]},
-    {brand:"New Balance",model:"9060",colorway:"Mushroom Beige",price:3299,tag:"Just in",gender:"Unisex",fit:"contain",photos:["076d8bee-7773-44eb-9afd-afde8ea4ff3b.JPG"],sizes:[5,6,7,8,9,10,11]},
-    {brand:"New Balance",model:"9060",colorway:"Olive Cream",price:3299,tag:"Just in",gender:"Men",fit:"contain",photos:["00851e21-3302-4292-aadd-4aed339078db.JPG"],sizes:[6,7,8,9,10,11,12]},
-    {brand:"adidas",model:"Campus 00s",colorway:"Navy White Gum",price:2299,tag:"Just in",gender:"Unisex",fit:"contain",photos:["5aad5f92-f9d8-4bb3-b3f1-bd4b90ce25fa.JPG"],sizes:[4,5,6,7,8,9,10,11]},
-    {brand:"adidas",model:"Campus 00s",colorway:"Olive Beige",price:2299,tag:"Just in",gender:"Unisex",fit:"contain",photos:["5b4c5376-3d64-4555-ab04-183c9e1037b1.JPG"],sizes:[5,6,7,8,9,10,11]},
-    {brand:"adidas",model:"Adizero",colorway:"Rasta Black",price:3499,tag:"Just in",gender:"Men",fit:"contain",photos:["0223eefe-6d93-4fc0-a3f7-7c28544fcf3f.JPG"],sizes:[6,7,8,9,10,11,12]},
-    {brand:"adidas",model:"Adizero",colorway:"Solar Yellow",price:3499,tag:"Just in",gender:"Men",fit:"contain",photos:["a359f803-3fef-4b51-91d9-283e72be7aa5.JPG"],sizes:[6,7,8,9,10,11,12]},
-    {brand:"adidas",model:"Spezial",colorway:"Cream Pink Gum",price:2299,tag:"Just in",gender:"Women",fit:"contain",photos:["4d69c77f-91e0-4159-ba98-0b2f3997c927.JPG"],sizes:[4,5,6,7,8,9,10]},
-    {brand:"adidas",model:"Samba",colorway:"Loafer Black Gum",price:2499,tag:"Just in",gender:"Unisex",fit:"contain",photos:["ab9466bf-b370-4265-9c9d-aa6317d95a64.JPG"],sizes:[5,6,7,8,9,10,11]},
-    {brand:"adidas",model:"Samba",colorway:"White Black",price:2199,tag:"Just in",gender:"Unisex",fit:"contain",photos:["7d0b5dad-4db5-492e-acdd-8a4b54e56ddb.JPG"],sizes:[4,5,6,7,8,9,10,11,12]},
-    {brand:"adidas",model:"Gazelle Bold",colorway:"White Green Gum",price:2499,tag:"Just in",gender:"Women",fit:"contain",photos:["0e89209b-65ef-448b-84c9-08141c8cdad8.JPG"],sizes:[4,5,6,7,8,9,10]},
-    {brand:"adidas",model:"Drop Step",colorway:"Black Grey Orange",price:2299,tag:"Just in",gender:"Men",fit:"contain",photos:["022412a8-dd40-4e1a-a29d-4b2b0a961088.JPG"],sizes:[6,7,8,9,10,11,12]},
-    {brand:"adidas",model:"Court Revival",colorway:"Off White",price:1999,tag:"Just in",gender:"Women",fit:"contain",photos:["843c91bd-7258-4ad6-9d8e-4c4b29139863.JPG"],sizes:[4,5,6,7,8,9,10]},
-    {brand:"adidas",model:"Drop Step",colorway:"White Green Yellow",price:2299,tag:"Just in",gender:"Unisex",fit:"contain",photos:["f83c4ee7-16e3-4b1a-b3e7-9f15f97e734f.JPG"],sizes:[5,6,7,8,9,10,11]},
-    {brand:"Puma",model:"Suede XL",colorway:"Navy White",price:1999,tag:"Just in",gender:"Unisex",fit:"contain",photos:["730a7209-e996-4499-b17c-b1d0b5cd9e26.JPG"],sizes:[5,6,7,8,9,10,11]},
-    {brand:"Nike",model:"Air Max 95",colorway:"Fresh Mint",price:3299,was:null,tag:"Just in",gender:"Women",fit:"contain",photos:["0e89209b-65ef-448b-84c9-08141c8cdad8.JPG"],sizes:[5,6,7,8,9,10,11]},
+    {brand:"Nike",model:"P-6000",colorway:"Dark Grey",price:1300,tag:"Opening special",gender:"Unisex",fit:"contain",photos:["637cd05f-0f1b-450e-984d-3cbfc6d27002.JPG"],sizes:[4,5,6,7,8,9,10,11]},
+    {brand:"Nike",model:"P-6000",colorway:"White Pink",price:1300,tag:"Opening special",gender:"Women",fit:"contain",photos:["5fd8e632-84ec-4042-91f0-529b569bd5a5.JPG"],sizes:[4,5,6,7,8,9,10]},
+    {brand:"Nike",model:"Air Force 1",colorway:"Triple White",price:1300,tag:"Opening special",gender:"Unisex",fit:"contain",photos:["cd0246f8-ff10-4f2d-bb2a-e970871d1915.JPG","41797f25-5090-4239-886e-1a11576f7f12.JPG"],sizes:[4,5,6,7,8,9,10,11,12]},
+    {brand:"Nike",model:"Air Force 1",colorway:"Triple Black",price:1300,tag:"Opening special",gender:"Unisex",fit:"contain",photos:["b9894cca-2d74-4eed-b0df-c56e8bcb358e.JPG"],sizes:[4,5,6,7,8,9,10,11,12]},
+    {brand:"Nike",model:"Air Force 1",colorway:"Love Letter",price:1300,tag:"Opening special",gender:"Women",fit:"contain",photos:["9a620886-82dc-4cff-99b4-1a09e8629b8d.JPG"],sizes:[4,5,6,7,8,9,10]},
+    {brand:"Nike",model:"Air Force 1",colorway:"Pink Hearts",price:1300,tag:"Opening special",gender:"Women",fit:"contain",photos:["8e83c8c3-c2ee-492e-80ed-d4dc65aa0d5e.JPG"],sizes:[4,5,6,7,8,9]},
+    {brand:"Nike",model:"Air Force 1",colorway:"Black Red",price:1300,tag:"Opening special",gender:"Men",fit:"contain",photos:["96c48813-c599-48bd-af47-25c269512d37.JPG"],sizes:[6,7,8,9,10,11,12]},
+    {brand:"Nike",model:"Air Force 1",colorway:"Cream Gold Gum",price:1300,tag:"Opening special",gender:"Women",fit:"contain",photos:["0254ca82-b551-4cbf-9c41-53a27dbac02e.JPG"],sizes:[4,5,6,7,8,9,10]},
+    {brand:"Nike",model:"Jordan 4",colorway:"Black Cat",price:1300,tag:"Opening special",gender:"Men",fit:"contain",photos:["54dcd405-1251-463d-a76e-24413e89f9f4.JPG"],sizes:[6,7,8,9,10,11,12]},
+    {brand:"Nike",model:"Jordan 1 Low",colorway:"Bred Toe",price:1300,tag:"Opening special",gender:"Unisex",fit:"contain",photos:["45cef18c-18cd-48ad-a127-d92cc496285b.JPG"],sizes:[4,5,6,7,8,9,10,11]},
+    {brand:"Nike",model:"Jordan 1 Mid",colorway:"Light Smoke Grey",price:1300,tag:"Opening special",gender:"Men",fit:"contain",photos:["74e15e49-6492-49f8-9d01-ad976cf402d6.JPG"],sizes:[6,7,8,9,10,11,12]},
+    {brand:"Nike",model:"Dunk Low",colorway:"Purple Marble",price:1300,tag:"Opening special",gender:"Women",fit:"contain",photos:["251d17df-3c2f-47cf-8606-7a46f506fcec.JPG"],sizes:[4,5,6,7,8,9,10]},
+    {brand:"Nike",model:"Dunk Low SB",colorway:"Grey Fog",price:1300,tag:"Opening special",gender:"Unisex",fit:"contain",photos:["a7bbed38-c8fb-4162-8d15-c1292621a324.JPG"],sizes:[5,6,7,8,9,10,11]},
+    {brand:"Nike",model:"Dunk Low",colorway:"Industrial Blue Denim",price:1300,tag:"Opening special",gender:"Unisex",fit:"contain",photos:["1a4166cd-e6b8-4799-b36b-f0be991d8176.JPG"],sizes:[5,6,7,8,9,10,11]},
+    {brand:"Nike",model:"Air Max 90",colorway:"Pink Grey",price:1300,tag:"Opening special",gender:"Women",fit:"contain",photos:["b3471d73-3b0c-4e93-a703-a64703309efc.JPG"],sizes:[4,5,6,7,8,9]},
+    {brand:"Nike",model:"Air Max 90",colorway:"Wolf Grey",price:1300,tag:"Opening special",gender:"Men",fit:"contain",photos:["5947b3e0-4c09-4fe0-86b9-6c70bc55c136.JPG","2f31e2ff-1fe5-425f-83ac-34b235b6c86f.JPG"],sizes:[6,7,8,9,10,11,12]},
+    {brand:"Nike",model:"Air Max 90",colorway:"Triple White",price:1300,tag:"Opening special",gender:"Unisex",fit:"contain",photos:["68f1e03c-5b7b-4a49-b09e-d05c1d1f5ad2.JPG"],sizes:[4,5,6,7,8,9,10,11,12]},
+    {brand:"Nike",model:"Air Max Plus",colorway:"White Volt",price:1300,tag:"Opening special",gender:"Men",fit:"contain",photos:["2b758f0e-b13f-4181-aae1-ed0f382079d8.JPG"],sizes:[6,7,8,9,10,11,12]},
+    {brand:"Nike",model:"Air Max Plus III",colorway:"White Navy",price:1300,tag:"Opening special",gender:"Men",fit:"contain",photos:["171ffb9a-0c3d-42f8-a50d-5d965e85b42e.JPG"],sizes:[6,7,8,9,10,11,12]},
+    {brand:"Nike",model:"Air Max Plus",colorway:"Black Pink",price:1300,tag:"Opening special",gender:"Women",fit:"contain",photos:["f8b3a647-8fa9-49f6-9362-62196dacbebc.JPG"],sizes:[4,5,6,7,8,9,10]},
+    {brand:"Nike",model:"Air Max Plus",colorway:"White Black",price:1300,tag:"Opening special",gender:"Men",fit:"contain",photos:["abb3f0b2-41bb-47e0-8ad8-0c70375aca72.JPG"],sizes:[6,7,8,9,10,11,12]},
+    {brand:"Nike",model:"Air Max 97",colorway:"Pink Burgundy",price:1300,tag:"Opening special",gender:"Women",fit:"contain",photos:["0f549c21-a59a-4105-88e0-970528d12bae.JPG"],sizes:[4,5,6,7,8,9,10]},
+    {brand:"Nike",model:"Air Max 97",colorway:"Rose Coral",price:1300,tag:"Opening special",gender:"Women",fit:"contain",photos:["8713d139-4045-42aa-918a-d13004b4843c.JPG"],sizes:[4,5,6,7,8,9,10]},
+    {brand:"Nike",model:"Air Max 95",colorway:"Wolf Grey",price:1300,tag:"Opening special",gender:"Men",fit:"contain",photos:["a1d28987-f86b-4756-af4b-8fd5f967ccf9.JPG"],sizes:[6,7,8,9,10,11,12]},
+    {brand:"Nike",model:"Air Max 1",colorway:"Grey Black",price:1300,tag:"Opening special",gender:"Men",fit:"contain",photos:["a0c8f4be-d8f6-4062-82a0-39bab4fab3cd.JPG"],sizes:[6,7,8,9,10,11]},
+    {brand:"Nike",model:"Air Max Dn",colorway:"Pink Mauve",price:1300,tag:"Opening special",gender:"Women",fit:"contain",photos:["42cd1844-fdd2-4d50-b861-2eca66ad8902.JPG"],sizes:[4,5,6,7,8,9,10]},
+    {brand:"Nike",model:"Shox TL",colorway:"White Silver",price:1300,tag:"Opening special",gender:"Men",fit:"contain",photos:["07df58bf-e774-4157-927c-e5e83a0ad5c6.JPG"],sizes:[6,7,8,9,10,11,12]},
+    {brand:"Nike",model:"Shox TL",colorway:"Sunrise",price:1300,tag:"Opening special",gender:"Men",fit:"contain",photos:["2ac12a6f-5afe-4932-a54e-df55c5e4bc2f.JPG"],sizes:[6,7,8,9,10,11,12]},
+    {brand:"Nike",model:"Shox TL",colorway:"Mauve Burgundy",price:1300,tag:"Opening special",gender:"Women",fit:"contain",photos:["01be1cac-f8cc-4cb5-94ba-c1f1549b849f.JPG"],sizes:[4,5,6,7,8,9,10]},
+    {brand:"Nike",model:"NOCTA Hot Step",colorway:"Black White",price:1300,tag:"Opening special",gender:"Men",fit:"contain",photos:["efb9c333-ae16-485b-93c1-5488acc61388.JPG"],sizes:[6,7,8,9,10,11,12]},
+    {brand:"Nike",model:"Vomero 5",colorway:"Silver Black",price:1300,tag:"Opening special",gender:"Unisex",fit:"contain",photos:["44164576-d67f-4bfe-b0d5-7bd1e36046ad.JPG"],sizes:[5,6,7,8,9,10,11]},
+    {brand:"Nike",model:"ZoomX Streakfly",colorway:"White Turquoise",price:1300,tag:"Opening special",gender:"Unisex",fit:"contain",photos:["86073d88-04c9-41a5-8427-d769ae34993a.JPG"],sizes:[5,6,7,8,9,10,11]},
+    {brand:"New Balance",model:"9060",colorway:"Crystal Pink",price:1300,tag:"Opening special",gender:"Women",fit:"contain",photos:["9170e196-58bd-4366-b15d-01284b08ec92.JPG"],sizes:[4,5,6,7,8,9,10]},
+    {brand:"New Balance",model:"9060",colorway:"Burgundy Brown",price:1300,tag:"Opening special",gender:"Unisex",fit:"contain",photos:["f137f44c-b0ec-47b1-8646-fe1828b423be.JPG"],sizes:[5,6,7,8,9,10,11]},
+    {brand:"New Balance",model:"9060",colorway:"Mushroom Beige",price:1300,tag:"Opening special",gender:"Unisex",fit:"contain",photos:["076d8bee-7773-44eb-9afd-afde8ea4ff3b.JPG"],sizes:[5,6,7,8,9,10,11]},
+    {brand:"New Balance",model:"9060",colorway:"Olive Cream",price:1300,tag:"Opening special",gender:"Men",fit:"contain",photos:["00851e21-3302-4292-aadd-4aed339078db.JPG"],sizes:[6,7,8,9,10,11,12]},
+    {brand:"adidas",model:"Campus 00s",colorway:"Navy White Gum",price:1300,tag:"Opening special",gender:"Unisex",fit:"contain",photos:["5aad5f92-f9d8-4bb3-b3f1-bd4b90ce25fa.JPG"],sizes:[4,5,6,7,8,9,10,11]},
+    {brand:"adidas",model:"Campus 00s",colorway:"Olive Beige",price:1300,tag:"Opening special",gender:"Unisex",fit:"contain",photos:["5b4c5376-3d64-4555-ab04-183c9e1037b1.JPG"],sizes:[5,6,7,8,9,10,11]},
+    {brand:"adidas",model:"Adizero",colorway:"Rasta Black",price:1300,tag:"Opening special",gender:"Men",fit:"contain",photos:["0223eefe-6d93-4fc0-a3f7-7c28544fcf3f.JPG"],sizes:[6,7,8,9,10,11,12]},
+    {brand:"adidas",model:"Adizero",colorway:"Solar Yellow",price:1300,tag:"Opening special",gender:"Men",fit:"contain",photos:["a359f803-3fef-4b51-91d9-283e72be7aa5.JPG"],sizes:[6,7,8,9,10,11,12]},
+    {brand:"adidas",model:"Spezial",colorway:"Cream Pink Gum",price:1300,tag:"Opening special",gender:"Women",fit:"contain",photos:["4d69c77f-91e0-4159-ba98-0b2f3997c927.JPG"],sizes:[4,5,6,7,8,9,10]},
+    {brand:"adidas",model:"Samba",colorway:"Loafer Black Gum",price:1300,tag:"Opening special",gender:"Unisex",fit:"contain",photos:["ab9466bf-b370-4265-9c9d-aa6317d95a64.JPG"],sizes:[5,6,7,8,9,10,11]},
+    {brand:"adidas",model:"Samba",colorway:"White Black",price:1300,tag:"Opening special",gender:"Unisex",fit:"contain",photos:["7d0b5dad-4db5-492e-acdd-8a4b54e56ddb.JPG"],sizes:[4,5,6,7,8,9,10,11,12]},
+    {brand:"adidas",model:"Gazelle Bold",colorway:"White Green Gum",price:1300,tag:"Opening special",gender:"Women",fit:"contain",photos:["0e89209b-65ef-448b-84c9-08141c8cdad8.JPG"],sizes:[4,5,6,7,8,9,10]},
+    {brand:"adidas",model:"Drop Step",colorway:"Black Grey Orange",price:1300,tag:"Opening special",gender:"Men",fit:"contain",photos:["022412a8-dd40-4e1a-a29d-4b2b0a961088.JPG"],sizes:[6,7,8,9,10,11,12]},
+    {brand:"adidas",model:"Court Revival",colorway:"Off White",price:1300,tag:"Opening special",gender:"Women",fit:"contain",photos:["843c91bd-7258-4ad6-9d8e-4c4b29139863.JPG"],sizes:[4,5,6,7,8,9,10]},
+    {brand:"adidas",model:"Drop Step",colorway:"White Green Yellow",price:1300,tag:"Opening special",gender:"Unisex",fit:"contain",photos:["f83c4ee7-16e3-4b1a-b3e7-9f15f97e734f.JPG"],sizes:[5,6,7,8,9,10,11]},
+    {brand:"Puma",model:"Suede XL",colorway:"Navy White",price:1300,tag:"Opening special",gender:"Unisex",fit:"contain",photos:["730a7209-e996-4499-b17c-b1d0b5cd9e26.JPG"],sizes:[5,6,7,8,9,10,11]},
+    {brand:"Nike",model:"Air Max 95",colorway:"Fresh Mint",price:1300,was:null,tag:"Opening special",gender:"Women",fit:"contain",photos:["0e89209b-65ef-448b-84c9-08141c8cdad8.JPG"],sizes:[5,6,7,8,9,10,11]},
   ];
 
   // Remove last duplicate entry (was a leftover)
@@ -312,8 +312,8 @@ app.get('/img/:size/:filename', async (req, res) => {
 });
 
 // --------------- API Routes ---------------
-const FREE_OVER = 2500;
-const COURIER = 120;
+const FREE_OVER = 0;
+const COURIER = 0;
 
 app.get('/api/products', (req, res) => {
   const rows = stmts.allProducts.all();
@@ -393,7 +393,7 @@ app.post('/api/orders', (req, res) => {
   const waMsg = encodeURIComponent(
     `Hi Daylight! I'd like to order:\n\n${lines}\n\n` +
     `Subtotal: R${subtotal.toLocaleString()}\n` +
-    `Courier: ${deliveryCost ? 'R' + deliveryCost : 'Free'}\n` +
+    `Delivery: Free\n` +
     `Total: R${total.toLocaleString()}\n\n` +
     `${name} · ${phone}\nRef: ${ref}`
   );

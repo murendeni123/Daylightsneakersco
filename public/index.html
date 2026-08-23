@@ -237,7 +237,7 @@ img{display:block;max-width:100%}
 }
 @media(max-width:640px){
   .top-bar{padding:8px 16px;font-size:12px;gap:8px}
-  .top-bar,.nav,.section,.breadcrumb,.page-title,.page-sub,.list-head,.chips,.product-grid,.checkout-grid,.confirm-grid,.track-grid,.help-grid,.help-cta,.pdp,.banner{padding-left:16px;padding-right:16px}
+  .top-bar,.nav,.section,.breadcrumb,.page-title,.page-sub,.list-head,.chips,.product-grid,.checkout-grid,.confirm-grid,.track-grid,.help-grid,.help-cta,.pdp,.banner,.promo-poster{padding-left:16px;padding-right:16px}
   .nav{gap:10px;padding:0 16px;height:50px}
   .nav-logo{font-size:18px;flex-shrink:0}
   .nav-links{display:none}
@@ -282,7 +282,7 @@ let STATE = {
   memberForm: { name:'', phone:'', email:'' },
   memberDone: false,
   products: [],
-  config: { freeOver: 2500, courier: 120, waNumber: '27820000000', stripeEnabled: false },
+  config: { freeOver: 0, courier: 0, waNumber: '27820000000', stripeEnabled: false },
   filter: 'All',
   sort: 'Newest first',
   query: '',
@@ -376,7 +376,7 @@ function subtotal() {
 }
 
 function deliveryCost() {
-  return subtotal() >= STATE.config.freeOver ? 0 : STATE.config.courier;
+  return 0;
 }
 
 function bagCount() {
@@ -478,7 +478,7 @@ async function placeOrder() {
 }
 
 function tileHTML(p, size) {
-  const tagColors = { 'Reduced': ['#E01E00','#fff'], 'Low stock': ['#E6FF00','#0E0E0E'] };
+  const tagColors = { 'Reduced': ['#E01E00','#fff'], 'Low stock': ['#E6FF00','#0E0E0E'], 'Opening special': ['#E01E00','#fff'] };
   const [tagBg, tagInk] = tagColors[p.tag] || ['#0E0E0E','#fff'];
   const priceColor = p.was ? '#E01E00' : '#0E0E0E';
   const imgSize = size || 'thumb';
@@ -509,7 +509,7 @@ function waMessage() {
   const sub = subtotal();
   const del = deliveryCost();
   const payNote = `\n\nPayment: EFT — I'll send proof of payment shortly.\nPlease use ref ${STATE.orderRef || 'pending'} to match my payment.`;
-  return `Hi Daylight! I'd like to order:\n\n${lines}\n\nSubtotal: ${R(sub)}\nCourier: ${del ? R(del) : 'Free'}\nTotal: ${R(sub + del)}${payNote}\n\nName: ${f.name || '—'}\nContact: ${f.phone || '—'}\nAddress: ${[f.address, f.city, f.postcode].filter(Boolean).join(', ')}\nRef: ${STATE.orderRef || 'pending'}`;
+  return `Hi Daylight! I'd like to order:\n\n${lines}\n\nSubtotal: ${R(sub)}\nDelivery: Free\nTotal: ${R(sub + del)}${payNote}\n\nName: ${f.name || '—'}\nContact: ${f.phone || '—'}\nAddress: ${[f.address, f.city, f.postcode].filter(Boolean).join(', ')}\nRef: ${STATE.orderRef || 'pending'}`;
 }
 
 function render() {
@@ -584,19 +584,23 @@ function renderHome() {
       ${hero ? `<img src="${heroImg}" alt="${hero.model}">` : ''}
       <div class="hero-overlay"></div>
       <div class="hero-content">
-        <div class="sub">New in this week</div>
-        <h1>Fresh<br>drops</h1>
-        <p>${products.length} pairs photographed in-house and ready to ship. UK 4 to 12, nationwide delivery.</p>
+        <div class="sub">Opening special</div>
+        <h1>Any pair<br>R1 300</h1>
+        <p>${products.length} pairs photographed in-house. Any size, any pair, free delivery nationwide.</p>
         <div class="hero-btns">
-          ${hero ? `<a class="btn-white" onclick="openProduct(${hero.id})">Shop the ${hero.model}</a>` : ''}
+          ${hero ? `<a class="btn-white" onclick="go('list',{filter:'All'})">Shop now</a>` : ''}
           <a class="btn-glass" onclick="go('list',{filter:'All'})">See everything</a>
         </div>
       </div>
     </div>
 
     <div class="banner">
-      <b>Free 48-hour courier on orders over R2 500 — nationwide, tracked.</b>
+      <b>Opening special — any pair R1 300, free delivery nationwide.</b>
       <a onclick="go('help')">How delivery works</a>
+    </div>
+
+    <div class="promo-poster" style="padding:0 40px;margin-top:32px;cursor:pointer" onclick="go('list',{filter:'All'})">
+      <img src="/img/opening-special.png" alt="Opening Special — Any pair R1 300, free delivery" style="width:100%;border-radius:8px;display:block">
     </div>
 
     <div class="section">
@@ -674,7 +678,7 @@ function renderProduct() {
   if (!p) return '<div style="padding:80px 40px;text-align:center">Loading...</div>';
 
   const allSizes = [4,5,6,7,8,9,10,11,12];
-  const tagColors = { 'Reduced': ['#E01E00','#fff'], 'Low stock': ['#E6FF00','#0E0E0E'] };
+  const tagColors = { 'Reduced': ['#E01E00','#fff'], 'Low stock': ['#E6FF00','#0E0E0E'], 'Opening special': ['#E01E00','#fff'] };
   const [tagBg, tagInk] = tagColors[p.tag] || ['#0E0E0E','#fff'];
   const priceColor = p.was ? '#E01E00' : '#0E0E0E';
   const mainImg = p.images[Math.min(STATE.shotIndex, p.images.length - 1)];
@@ -738,7 +742,7 @@ function renderProduct() {
         <div class="facts">
           <div class="fact"><span class="k">Condition</span><span class="v">Brand new, in box</span></div>
           <div class="fact"><span class="k">Sizing</span><span class="v">UK, true to size</span></div>
-          <div class="fact"><span class="k">Delivery</span><span class="v">${sub >= STATE.config.freeOver ? 'Free, 48 hours' : 'R' + STATE.config.courier + ', 48 hours'}</span></div>
+          <div class="fact"><span class="k">Delivery</span><span class="v">Free, 48 hours</span></div>
           <div class="fact"><span class="k">Returns</span><span class="v">14 days, unworn</span></div>
         </div>
       </div>
@@ -789,7 +793,7 @@ function renderCheckout() {
       <div style="display:grid;gap:10px;margin-top:14px">
         <button class="option-btn on">
           <span><span class="title">Courier to your door</span><span class="body">Two working days to major centres, three to four outlying. Nationwide, tracked.</span></span>
-          <span class="cost">${sub >= STATE.config.freeOver ? 'Free' : R(STATE.config.courier)}</span>
+          <span class="cost">Free</span>
         </button>
       </div>
 
@@ -966,16 +970,16 @@ function renderFooter() {
       <div class="footer-col">
         <h4>Daylight</h4>
         <a onclick="go('help')">About us</a>
-        <a onclick="flash('@daylight.za')">Instagram</a>
         <a href="https://wa.me/27659662508?text=Hi%20Daylight!" target="_blank">WhatsApp</a>
       </div>
       <div class="footer-brand">
-        Daylight
-        <p>Sneaker retail out of South Africa. Real pairs, real photos, a real person on the other end of the chat.</p>
+        <img src="/logo/logo-on-dark.png" alt="Daylight Sneaker Co." style="height:64px;margin-bottom:12px">
+        Daylight Sneaker Co.
+        <p>Sneaker retail out of South Africa. Quality pairs, real photos, a real person on the other end of the chat.</p>
       </div>
     </div>
     <div class="footer-bottom">
-      <span>South Africa · hello@daylight.co.za</span>
+      <span>South Africa</span>
       <span>Daylight Sneaker Co.</span>
     </div>
   </div>`;
@@ -1021,8 +1025,8 @@ function renderBag() {
     </div>
     ${s.bag.length > 0 ? `<div class="bag-footer">
       <div class="summary-row" style="font-size:14px"><span class="label">Subtotal</span><span class="value">${R(sub)}</span></div>
-      <div class="summary-row" style="font-size:14px;margin-top:7px"><span class="label">Courier</span><span class="value">${sub >= STATE.config.freeOver ? 'Free' : R(STATE.config.courier)}</span></div>
-      <div style="font-size:13px;color:#8B8983;margin-top:8px">${sub >= STATE.config.freeOver ? 'Delivery is on us on this order.' : 'Add ' + R(STATE.config.freeOver - sub) + ' more for free delivery.'}</div>
+      <div class="summary-row" style="font-size:14px;margin-top:7px"><span class="label">Delivery</span><span class="value">Free</span></div>
+      <div style="font-size:13px;color:#8B8983;margin-top:8px">Free delivery on all orders.</div>
       <button class="btn-full" onclick="go('checkout')">Checkout</button>
     </div>` : ''}
   </div>`;
