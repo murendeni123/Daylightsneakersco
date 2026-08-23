@@ -20,7 +20,7 @@ img{display:block;max-width:100%}
 .top-bar a:hover{text-decoration:underline}
 .top-links{display:flex;gap:20px}
 .nav{display:flex;align-items:center;gap:36px;padding:0 40px;height:66px;border-bottom:1px solid #EDEDED;position:sticky;top:0;background:#fff;z-index:40}
-.nav-logo{font-family:'Archivo Black',Archivo,sans-serif;font-size:22px;letter-spacing:-.035em;text-transform:uppercase;cursor:pointer}
+.nav-logo{font-family:'Archivo Black',Archivo,sans-serif;font-size:22px;letter-spacing:-.035em;text-transform:uppercase;cursor:pointer;display:flex;align-items:center}
 .nav-links{display:flex;gap:24px;font-size:14px;font-weight:700}
 .nav-links a{padding:22px 0;cursor:pointer}
 .nav-links a.sale{color:#E01E00}
@@ -526,7 +526,7 @@ function render() {
 
   // Nav
   html += `<div class="nav">
-    <a class="nav-logo" onclick="go('home')">Daylight</a>
+    <a class="nav-logo" onclick="go('home')"><img src="/logo/mark-black.png" alt="Daylight" style="height:32px;vertical-align:middle;margin-right:6px"><span>Daylight</span></a>
     <div class="nav-links">
       <a onclick="go('list',{filter:'All'})">New in</a>
       <a onclick="go('list',{filter:'Men'})">Men</a>
