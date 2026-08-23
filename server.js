@@ -75,6 +75,14 @@ function initDB() {
       created_at TEXT DEFAULT (datetime('now'))
     );
 
+    CREATE TABLE IF NOT EXISTS members (
+      id INTEGER PRIMARY KEY AUTOINCREMENT,
+      name TEXT NOT NULL,
+      phone TEXT NOT NULL UNIQUE,
+      email TEXT,
+      created_at TEXT DEFAULT (datetime('now'))
+    );
+
     CREATE TABLE IF NOT EXISTS order_items (
       id INTEGER PRIMARY KEY AUTOINCREMENT,
       order_id INTEGER NOT NULL REFERENCES orders(id),
@@ -358,7 +366,7 @@ app.post('/api/orders', (req, res) => {
     resolved.push({ ...item, product: p });
   }
 
-  const deliveryCost = delivery === 'collect' ? 0 : (subtotal >= FREE_OVER ? 0 : COURIER);
+  const deliveryCost = subtotal >= FREE_OVER ? 0 : COURIER;
   const total = subtotal + deliveryCost;
 
   const createOrder = db.transaction(() => {
@@ -385,7 +393,7 @@ app.post('/api/orders', (req, res) => {
   const waMsg = encodeURIComponent(
     `Hi Daylight! I'd like to order:\n\n${lines}\n\n` +
     `Subtotal: R${subtotal.toLocaleString()}\n` +
-    `${delivery === 'collect' ? 'Collection: Braamfontein' : `Courier: ${deliveryCost ? 'R' + deliveryCost : 'Free'}`}\n` +
+    `Courier: ${deliveryCost ? 'R' + deliveryCost : 'Free'}\n` +
     `Total: R${total.toLocaleString()}\n\n` +
     `${name} · ${phone}\nRef: ${ref}`
   );
@@ -457,6 +465,36 @@ app.post('/api/checkout/stripe', async (req, res) => {
 
   stmts.updateOrderStripe.run(session.id, order.id);
   res.json({ url: session.url });
+});
+
+app.post('/api/members', (req, res) => {
+  const { name, phone, email, action } = req.body;
+  if (!phone || !/[0-9]{9,}/.test(phone.replace(/\D/g, ''))) {
+    return res.status(400).json({ error: 'Valid phone number required' });
+  }
+
+  if (action === 'join') {
+    if (!name || !name.trim()) return res.status(400).json({ error: 'Name required' });
+    try {
+      db.prepare('INSERT INTO members (name, phone, email) VALUES (?, ?, ?)').run(name.trim(), phone.trim(), email ? email.trim() : null);
+    } catch (err) {
+      if (err.message.includes('UNIQUE')) {
+        return res.status(400).json({ error: 'This number is already a member. Try signing in instead.' });
+      }
+      throw err;
+    }
+  } else {
+    const member = db.prepare('SELECT * FROM members WHERE phone = ?').get(phone.trim());
+    if (!member) return res.status(404).json({ error: 'No membership found with that number. Join first?' });
+  }
+
+  const firstName = (name || '').trim().split(' ')[0] || 'there';
+  const waMsg = action === 'join'
+    ? encodeURIComponent(`Hi Daylight! I just joined as a member. My name is ${name.trim()}, phone: ${phone.trim()}. Looking forward to early access on drops!`)
+    : encodeURIComponent(`Hi Daylight! I'm signing in as a member. My number is ${phone.trim()}.`);
+  const waUrl = `https://wa.me/${WA}?text=${waMsg}`;
+
+  res.json({ ok: true, waUrl });
 });
 
 app.get('/api/config', (req, res) => {

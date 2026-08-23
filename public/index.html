@@ -277,6 +277,9 @@ const medium = thumb;
 
 let STATE = {
   view: 'home',
+  memberView: 'join',
+  memberForm: { name:'', phone:'', email:'' },
+  memberDone: false,
   products: [],
   config: { freeOver: 2500, courier: 120, waNumber: '27820000000', stripeEnabled: false },
   filter: 'All',
@@ -316,6 +319,7 @@ function updateHash() {
   else if (v === 'confirm' && STATE.orderRef) history.replaceState(null, '', '#confirm/' + STATE.orderRef);
   else if (v === 'track') history.replaceState(null, '', '#track');
   else if (v === 'help') history.replaceState(null, '', '#help');
+  else if (v === 'membership') history.replaceState(null, '', '#membership');
 }
 
 function flash(msg) {
@@ -371,7 +375,6 @@ function subtotal() {
 }
 
 function deliveryCost() {
-  if (STATE.delivery === 'collect') return 0;
   return subtotal() >= STATE.config.freeOver ? 0 : STATE.config.courier;
 }
 
@@ -423,10 +426,8 @@ async function placeOrder() {
   const errors = {};
   if (!f.name.trim()) errors.name = 'We need a name for the courier';
   if (!/[0-9]{9,}/.test(f.phone.replace(/\D/g, ''))) errors.phone = 'A working mobile number, please';
-  if (STATE.delivery === 'courier') {
-    if (!f.address.trim()) errors.address = 'Street address is required';
-    if (!f.city.trim()) errors.city = 'Which city?';
-  }
+  if (!f.address.trim()) errors.address = 'Street address is required';
+  if (!f.city.trim()) errors.city = 'Which city?';
   STATE.errors = errors;
   if (Object.keys(errors).length) { flash('A few details are missing'); render(); return; }
 
@@ -499,8 +500,8 @@ function waMessage() {
   const f = STATE.form;
   const sub = subtotal();
   const del = deliveryCost();
-  const payNote = STATE.payment === 'eft' ? `\n\nPayment: EFT — I'll send proof of payment shortly.\nPlease use ref ${STATE.orderRef || 'pending'} to match my payment.` : STATE.payment === 'collection' ? '\n\nPayment: Paying on collection.' : '';
-  return `Hi Daylight! I'd like to order:\n\n${lines}\n\nSubtotal: ${R(sub)}\n${STATE.delivery === 'collect' ? 'Collection: Braamfontein' : `Courier: ${del ? R(del) : 'Free'}`}\nTotal: ${R(sub + del)}${payNote}\n\nName: ${f.name || '—'}\nContact: ${f.phone || '—'}\n${STATE.delivery !== 'collect' ? `Address: ${[f.address, f.city, f.postcode].filter(Boolean).join(', ')}\n` : ''}Ref: ${STATE.orderRef || 'pending'}`;
+  const payNote = `\n\nPayment: EFT — I'll send proof of payment shortly.\nPlease use ref ${STATE.orderRef || 'pending'} to match my payment.`;
+  return `Hi Daylight! I'd like to order:\n\n${lines}\n\nSubtotal: ${R(sub)}\nCourier: ${del ? R(del) : 'Free'}\nTotal: ${R(sub + del)}${payNote}\n\nName: ${f.name || '—'}\nContact: ${f.phone || '—'}\nAddress: ${[f.address, f.city, f.postcode].filter(Boolean).join(', ')}\nRef: ${STATE.orderRef || 'pending'}`;
 }
 
 function render() {
@@ -547,6 +548,7 @@ function render() {
   else if (s.view === 'confirm') html += renderConfirm();
   else if (s.view === 'track') html += renderTrack();
   else if (s.view === 'help') html += renderHelp();
+  else if (s.view === 'membership') html += renderMembership();
 
   // Footer
   html += renderFooter();
@@ -554,7 +556,13 @@ function render() {
   // Bag drawer
   if (s.bagOpen) html += renderBag();
 
+  const activeId = document.activeElement ? document.activeElement.id : null;
+  const cursorPos = document.activeElement && document.activeElement.selectionStart;
   app.innerHTML = html;
+  if (activeId) {
+    const el = document.getElementById(activeId);
+    if (el) { el.focus(); if (cursorPos !== undefined && cursorPos !== null && el.setSelectionRange) try { el.setSelectionRange(cursorPos, cursorPos); } catch(e){} }
+  }
 }
 
 function renderHome() {
@@ -627,8 +635,8 @@ function renderHome() {
           <h2>First look at<br>every drop</h2>
           <p>Members see Thursday's pairs on Wednesday night and can hold a size before the site goes live. Free, no card needed.</p>
           <div style="display:flex;gap:10px;margin-top:24px">
-            <a class="btn-lime" onclick="go('help')">Join free</a>
-            <a class="btn-outline" onclick="go('help')">Sign in</a>
+            <a class="btn-lime" onclick="go('membership',{memberView:'join',memberDone:false})">Join free</a>
+            <a class="btn-outline" onclick="go('membership',{memberView:'signin',memberDone:false})">Sign in</a>
           </div>
         </div>
         <div class="member-right">
@@ -774,10 +782,10 @@ function renderCheckout() {
   const f = s.form;
   const e = s.errors;
 
-  const field = (key, label, placeholder, span) => `<label class="form-label${span === 2 ? ' span-2' : ''}">
+  const field = (key, label, placeholder, span, tabIdx) => `<label class="form-label${span === 2 ? ' span-2' : ''}">
     <span>${label}</span>
-    <input class="${e[key] ? 'err' : ''}" value="${f[key]}" placeholder="${placeholder}"
-      oninput="STATE.form.${key}=this.value;STATE.errors.${key}='';render()">
+    <input class="${e[key] ? 'err' : ''}" value="${f[key]}" placeholder="${placeholder}" tabindex="${tabIdx}"
+      oninput="STATE.form.${key}=this.value;STATE.errors.${key}=''" id="field-${key}">
     <span class="error">${e[key] || ''}</span>
   </label>`;
 
@@ -791,54 +799,48 @@ function renderCheckout() {
     <div>
       <div class="form-section">Where it goes</div>
       <div class="form-grid">
-        ${field('name', 'Full name', 'Thandi Mokoena')}
-        ${field('phone', 'Mobile number', '065 966 2508')}
-        ${field('address', 'Street address', '12 Juta Street, Braamfontein', 2)}
-        ${field('city', 'City', 'Johannesburg')}
-        ${field('postcode', 'Postal code', '2000')}
-        ${field('note', 'Anything we should know?', 'Buzzer is broken, call on arrival', 2)}
+        ${field('name', 'Full name', 'Thandi Mokoena', 1, 1)}
+        ${field('phone', 'Mobile number', '065 966 2508', 1, 2)}
+        ${field('address', 'Street address', '12 Juta Street, Braamfontein', 2, 3)}
+        ${field('city', 'City', 'Johannesburg', 1, 4)}
+        ${field('postcode', 'Postal code', '2000', 1, 5)}
+        ${field('note', 'Anything we should know?', 'Buzzer is broken, call on arrival', 2, 6)}
       </div>
 
       <div class="form-section" style="margin-top:30px">How it gets there</div>
       <div style="display:grid;gap:10px;margin-top:14px">
-        <button class="option-btn${delOn('courier')}" onclick="STATE.delivery='courier';render()">
-          <span><span class="title">Courier to your door</span><span class="body">Two working days to major centres, three to four outlying.</span></span>
+        <button class="option-btn on">
+          <span><span class="title">Courier to your door</span><span class="body">Two working days to major centres, three to four outlying. Nationwide, tracked.</span></span>
           <span class="cost">${sub >= STATE.config.freeOver ? 'Free' : R(STATE.config.courier)}</span>
-        </button>
-        <button class="option-btn${delOn('collect')}" onclick="STATE.delivery='collect';render()">
-          <span><span class="title">Collect in Braamfontein</span><span class="body">Ready in two hours, weekdays until 5pm. Try the pair on here.</span></span>
-          <span class="cost">Free</span>
         </button>
       </div>
 
       <div class="form-section" style="margin-top:30px">How you pay</div>
       <div style="display:grid;gap:10px;margin-top:14px">
-        <button class="option-btn${payOn('eft')}" onclick="STATE.payment='eft';render()">
-          <span><span class="title">EFT / Bank transfer</span><span class="body">Pay into our account and send proof of payment on WhatsApp.</span></span>
-          <span class="note">${s.payment === 'eft' ? 'Selected' : ''}</span>
+        <button class="option-btn on">
+          <span><span class="title">EFT / Bank transfer</span><span class="body">Pay into our Capitec account and send proof of payment on WhatsApp.</span></span>
+          <span class="note">Selected</span>
         </button>
         ${s.config.stripeEnabled ? `<button class="option-btn${payOn('card')}" onclick="STATE.payment='card';render()">
           <span><span class="title">Card or instant EFT</span><span class="body">Secure link, charged once your size is confirmed.</span></span>
           <span class="note">${s.payment === 'card' ? 'Selected' : ''}</span>
         </button>` : ''}
-        <button class="option-btn${payOn('collection')}" onclick="STATE.payment='collection';render()">
-          <span><span class="title">Pay on collection</span><span class="body">Card or cash when you pick the pair up.</span></span>
-          <span class="note">${s.payment === 'collection' ? 'Selected' : ''}</span>
-        </button>
       </div>
-      ${s.payment === 'eft' ? `<div style="margin-top:16px;background:#F7F7F5;border:1.5px solid #EDEDED;padding:18px">
+      <div style="margin-top:16px;background:#F7F7F5;border:1.5px solid #EDEDED;padding:18px">
         <div style="font-size:15px;font-weight:800;margin-bottom:12px">Banking details</div>
         <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;font-size:14px">
           <span style="color:#6E6C66">Bank</span><span style="font-weight:700">Capitec</span>
           <span style="color:#6E6C66">Account name</span><span style="font-weight:700">Daylight Sneaker Co.</span>
-          <span style="color:#6E6C66">Account number</span><span style="font-weight:700">2087 4521 893</span>
-          <span style="color:#6E6C66">Account type</span><span style="font-weight:700">Savings</span>
+          <span style="color:#6E6C66">Account number</span><span style="font-weight:700">2010994414</span>
           <span style="color:#6E6C66">Branch code</span><span style="font-weight:700">470010</span>
         </div>
         <div style="margin-top:14px;padding-top:14px;border-top:1px solid #EDEDED;font-size:14px;line-height:1.6;color:#54524D">
           <b style="color:#0E0E0E">Use your order reference as the payment reference</b> (e.g. DL-1234). After paying, send a screenshot of your proof of payment to us on WhatsApp with your order number.
         </div>
-      </div>` : ''}
+        <div style="margin-top:14px;padding:14px;background:#E6FF00;font-size:14px;line-height:1.6;font-weight:700;color:#0E0E0E">
+          Once your proof of payment is sent, we wait for the money to reflect in our account before dispatching your order. This usually takes a few hours.
+        </div>
+      </div>
     </div>
 
     <div>
@@ -876,15 +878,11 @@ function renderConfirm() {
 
   const confirmLine = s.payment === 'card'
     ? `A payment link is on its way to ${f.phone || 'your phone'}.`
-    : s.payment === 'collection'
-    ? 'Bring your reference to 12 Juta Street and the pair will be waiting.'
     : `Pay into the account below and send your proof of payment to us on WhatsApp.`;
 
-  const payLabel = s.payment === 'card' ? 'Card or instant EFT' : s.payment === 'collection' ? 'Pay on collection' : 'EFT / Bank transfer';
+  const payLabel = s.payment === 'card' ? 'Card or instant EFT' : 'EFT / Bank transfer';
 
-  const addressBlock = s.delivery === 'collect'
-    ? 'Collection\n12 Juta Street\nBraamfontein, Johannesburg'
-    : [f.name, f.address, f.city, f.postcode].filter(Boolean).join('\n') || '—';
+  const addressBlock = [f.name, f.address, f.city, f.postcode].filter(Boolean).join('\n') || '—';
 
   const msg = waMessage();
 
@@ -894,16 +892,18 @@ function renderConfirm() {
       <h1 class="confirm-title">Thanks, ${(f.name.trim().split(' ')[0]) || 'friend'}.<br>We are on it.</h1>
       <p class="confirm-body">Your reference is <b>${s.orderRef}</b>. ${confirmLine} A person replies from the shop, usually within the hour — no bots.</p>
 
-      ${s.payment === 'eft' ? `<div style="margin-top:24px;background:#F7F7F5;border:1.5px solid #EDEDED;padding:18px">
+      <div style="margin-top:24px;background:#F7F7F5;border:1.5px solid #EDEDED;padding:18px">
         <div style="font-size:16px;font-weight:800;margin-bottom:12px">Pay here</div>
         <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;font-size:14px">
           <span style="color:#6E6C66">Bank</span><span style="font-weight:700">Capitec</span>
           <span style="color:#6E6C66">Account name</span><span style="font-weight:700">Daylight Sneaker Co.</span>
-          <span style="color:#6E6C66">Account number</span><span style="font-weight:700">2087 4521 893</span>
-          <span style="color:#6E6C66">Account type</span><span style="font-weight:700">Savings</span>
+          <span style="color:#6E6C66">Account number</span><span style="font-weight:700">2010994414</span>
           <span style="color:#6E6C66">Branch code</span><span style="font-weight:700">470010</span>
           <span style="color:#6E6C66">Amount</span><span style="font-weight:700">${R(total)}</span>
           <span style="color:#6E6C66">Reference</span><span style="font-weight:700">${s.orderRef}</span>
+        </div>
+        <div style="margin-top:16px;padding:16px;background:#E6FF00;font-size:15px;line-height:1.7;font-weight:700;color:#0E0E0E">
+          Once your proof of payment is sent, we wait for the money to reflect in our account before we dispatch your order.
         </div>
         <div style="margin-top:16px;padding-top:14px;border-top:1px solid #EDEDED;font-size:14px;line-height:1.7;color:#54524D">
           <b style="color:#E01E00">Important:</b><br>
@@ -912,7 +912,7 @@ function renderConfirm() {
           3. Send it to us on WhatsApp with your order number
         </div>
         <a class="btn-lime" style="display:block;text-align:center;margin-top:14px" href="https://wa.me/27659662508?text=${encodeURIComponent('Hi Daylight! Here is my proof of payment for order ' + s.orderRef + '. [Attach POP screenshot]')}" target="_blank">Send proof of payment on WhatsApp</a>
-      </div>` : ''}
+      </div>
 
       <div style="display:flex;gap:10px;margin-top:24px;flex-wrap:wrap">
         <button class="btn-full" style="width:auto" onclick="go('track')">Track this order</button>
@@ -1023,6 +1023,75 @@ function renderHelp() {
   </div>`;
 }
 
+function renderMembership() {
+  const s = STATE;
+  const mf = s.memberForm;
+  const isJoin = s.memberView === 'join';
+
+  if (s.memberDone) {
+    return `<div class="breadcrumb"><a onclick="go('home')">Home</a> / Membership</div>
+    <div style="max-width:560px;margin:0 auto;padding:60px 40px;text-align:center">
+      <div style="font-size:48px;margin-bottom:20px">&#10003;</div>
+      <h1 style="font-family:'Archivo Black',Archivo,sans-serif;font-size:32px;letter-spacing:-.035em;text-transform:uppercase">${isJoin ? "You're in" : 'Welcome back'}</h1>
+      <p style="margin:14px 0 30px;font-size:16px;line-height:1.6;color:#54524D">${isJoin ? 'We\'ve sent a WhatsApp to confirm your membership. You\'ll get first access to every new drop before the site goes live.' : 'We\'ve sent a WhatsApp to verify your number. You\'ll get early access to every drop.'}</p>
+      <button class="btn-full" style="width:auto;display:inline-block" onclick="go('list',{filter:'All'})">Start shopping</button>
+    </div>`;
+  }
+
+  return `<div class="breadcrumb"><a onclick="go('home')">Home</a> / ${isJoin ? 'Join' : 'Sign in'}</div>
+  <div style="max-width:480px;margin:0 auto;padding:40px">
+    <h1 class="page-title" style="padding:0;font-size:36px">${isJoin ? 'Join free' : 'Sign in'}</h1>
+    <p style="margin:10px 0 30px;font-size:15px;color:#6E6C66;line-height:1.6">${isJoin ? 'Members get first access to every drop before the site goes live. Free, no card needed.' : 'Enter the phone number you signed up with.'}</p>
+
+    <div style="display:grid;gap:14px">
+      ${isJoin ? `<label class="form-label">
+        <span>Full name</span>
+        <input id="field-mname" value="${mf.name}" placeholder="Thandi Mokoena" tabindex="1"
+          oninput="STATE.memberForm.name=this.value">
+      </label>` : ''}
+      <label class="form-label">
+        <span>Mobile number (WhatsApp)</span>
+        <input id="field-mphone" value="${mf.phone}" placeholder="065 966 2508" tabindex="2"
+          oninput="STATE.memberForm.phone=this.value">
+      </label>
+      ${isJoin ? `<label class="form-label">
+        <span>Email (optional)</span>
+        <input id="field-memail" value="${mf.email}" placeholder="thandi@email.com" tabindex="3"
+          oninput="STATE.memberForm.email=this.value">
+      </label>` : ''}
+    </div>
+
+    <button class="btn-full" style="margin-top:24px" onclick="submitMembership()">${isJoin ? 'Join Daylight' : 'Sign in'}</button>
+
+    <div style="margin-top:20px;font-size:14px;color:#6E6C66;text-align:center">
+      ${isJoin ? `Already a member? <a style="font-weight:700;text-decoration:underline;cursor:pointer" onclick="STATE.memberView='signin';render()">Sign in</a>` :
+      `Not a member yet? <a style="font-weight:700;text-decoration:underline;cursor:pointer" onclick="STATE.memberView='join';render()">Join free</a>`}
+    </div>
+  </div>`;
+}
+
+async function submitMembership() {
+  const mf = STATE.memberForm;
+  const isJoin = STATE.memberView === 'join';
+  if (isJoin && !mf.name.trim()) { flash('Enter your name'); return; }
+  if (!/[0-9]{9,}/.test(mf.phone.replace(/\D/g, ''))) { flash('Enter a valid mobile number'); return; }
+
+  try {
+    const res = await fetch('/api/members', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ name: mf.name, phone: mf.phone, email: mf.email, action: STATE.memberView })
+    });
+    const data = await res.json();
+    if (!res.ok) { flash(data.error || 'Something went wrong'); return; }
+    STATE.memberDone = true;
+    if (data.waUrl) setTimeout(() => window.open(data.waUrl, '_blank'), 500);
+    render();
+  } catch (err) {
+    flash('Network error — try again');
+  }
+}
+
 function renderFooter() {
   return `<div class="footer">
     <div class="footer-grid">
@@ -1050,7 +1119,7 @@ function renderFooter() {
       <div class="footer-col">
         <h4>Daylight</h4>
         <a onclick="go('help')">About us</a>
-        <a onclick="go('help')">Join free</a>
+        <a onclick="go('membership',{memberView:'join',memberDone:false})">Join free</a>
         <a onclick="flash('@daylight.za')">Instagram</a>
         <a href="https://wa.me/27659662508?text=Hi%20Daylight!" target="_blank">WhatsApp</a>
       </div>
@@ -1131,6 +1200,7 @@ function handleHash() {
   }
   else if (hash === 'track') go('track');
   else if (hash === 'help') go('help');
+  else if (hash === 'membership') go('membership');
 }
 
 // Boot
