@@ -319,9 +319,8 @@ function updateHash() {
   else if (v === 'product' && STATE.productId) history.replaceState(null, '', '#product/' + STATE.productId);
   else if (v === 'checkout') history.replaceState(null, '', '#checkout');
   else if (v === 'confirm' && STATE.orderRef) history.replaceState(null, '', '#confirm/' + STATE.orderRef);
-  else if (v === 'track') history.replaceState(null, '', '#track');
+
   else if (v === 'help') history.replaceState(null, '', '#help');
-  else if (v === 'membership') history.replaceState(null, '', '#membership');
 }
 
 function flash(msg) {
@@ -525,7 +524,7 @@ function render() {
 
   // Top bar
   html += `<div class="top-bar">
-    <div class="top-links"><a onclick="go('help')">Delivery &amp; returns</a><a onclick="go('track')">Track my order</a></div>
+    <div class="top-links"><a onclick="go('help')">Delivery &amp; returns</a></div>
     <div class="top-links"><span>South Africa</span><a href="https://wa.me/27659662508?text=Hi%20Daylight!" target="_blank">Talk to us on WhatsApp</a></div>
   </div>`;
 
@@ -544,7 +543,6 @@ function render() {
         <span style="color:#93938C;font-size:14px">&#x2315;</span>
         <input id="searchInput" placeholder="Search sneakers" value="${s.query}" oninput="STATE.query=this.value;if(this.value)STATE.view='list';render()">
       </div>
-      <a onclick="go('track')" style="font-size:13px;font-weight:700">Orders</a>
       <button class="bag-btn" onclick="STATE.bagOpen=true;render()">Bag (${bc})</button>
     </div>
   </div>`;
@@ -555,9 +553,7 @@ function render() {
   else if (s.view === 'product') html += renderProduct();
   else if (s.view === 'checkout') html += renderCheckout();
   else if (s.view === 'confirm') html += renderConfirm();
-  else if (s.view === 'track') html += renderTrack();
   else if (s.view === 'help') html += renderHelp();
-  else if (s.view === 'membership') html += renderMembership();
 
   // Footer
   html += renderFooter();
@@ -637,33 +633,6 @@ function renderHome() {
       </div>
     </div>
 
-    <div class="section">
-      <div class="member-block">
-        <div class="member-left">
-          <div class="label">For members</div>
-          <h2>First look at<br>every drop</h2>
-          <p>Members see Thursday's pairs on Wednesday night and can hold a size before the site goes live. Free, no card needed.</p>
-          <div style="display:flex;gap:10px;margin-top:24px">
-            <a class="btn-lime" onclick="go('membership',{memberView:'join',memberDone:false})">Join free</a>
-            <a class="btn-outline" onclick="go('membership',{memberView:'signin',memberDone:false})">Sign in</a>
-          </div>
-        </div>
-        <div class="member-right">
-          <div style="display:grid;grid-template-columns:36px 1fr;gap:14px;align-items:start">
-            <span class="step-num">01</span>
-            <div><div class="step-title">Reserve your size</div><p class="step-body">The size grid only shows what is physically in the room today.</p></div>
-          </div>
-          <div style="display:grid;grid-template-columns:36px 1fr;gap:14px;align-items:start">
-            <span class="step-num">02</span>
-            <div><div class="step-title">Order lands in WhatsApp</div><p class="step-body">Pre-typed with sizes, totals and a reference number.</p></div>
-          </div>
-          <div style="display:grid;grid-template-columns:36px 1fr;gap:14px;align-items:start">
-            <span class="step-num">03</span>
-            <div><div class="step-title">Pay however suits</div><p class="step-body">Card, instant EFT, or sort it out in the chat before anything ships.</p></div>
-          </div>
-        </div>
-      </div>
-    </div>
   </div>`;
 }
 
@@ -928,7 +897,6 @@ function renderConfirm() {
       </div>
 
       <div style="display:flex;gap:10px;margin-top:24px;flex-wrap:wrap">
-        <button class="btn-full" style="width:auto" onclick="go('track')">Track this order</button>
         <button class="btn-full-outline" style="width:auto" onclick="go('home')">Keep shopping</button>
       </div>
       <div class="confirm-details">
@@ -944,70 +912,6 @@ function renderConfirm() {
       <button class="btn-lime" style="margin-top:auto" onclick="navigator.clipboard.writeText(decodeURIComponent('${encodeURIComponent(msg)}'));flash('Message copied')">Copy this message</button>
     </div>
   </div>`;
-}
-
-function renderTrack() {
-  const s = STATE;
-  const stages = [
-    ['Order received', 'Just now', 'Your order and reference landed in the shop\'s WhatsApp.'],
-    ['Size confirmed', 'Within the hour', 'We check the pair is physically in the room, then send a payment link.'],
-    ['Packed and collected', 'Same or next day', 'Inspected once more, boxed, handed to the courier.'],
-    ['Out for delivery', 'Within 48 hours', 'Tracking number comes back to the same chat.']
-  ];
-  const at = s.trackResult ? (['received','confirmed','packed','delivered'].indexOf(s.trackResult.status) || 0) : -1;
-
-  return `<div class="breadcrumb"><a onclick="go('home')">Home</a> / Track my order</div>
-  <h1 class="page-title">Track my order</h1>
-  <div class="track-grid">
-    <div>
-      <div class="track-input">
-        <input value="${s.trackRef}" placeholder="Reference, e.g. DL-4821" oninput="STATE.trackRef=this.value">
-        <button onclick="lookupOrder()">Look up</button>
-      </div>
-      <div style="font-size:14px;color:#6E6C66;margin-top:10px">${s.trackNote}</div>
-      ${at >= 0 ? `<div style="margin-top:28px;display:flex;flex-direction:column">
-        ${stages.map((st, i) => `<div class="timeline-step">
-          <div class="timeline-dot">
-            <span class="dot" style="background:${i <= at ? '#0E0E0E' : '#fff'};border:2px solid ${i <= at ? '#0E0E0E' : '#DEDEDE'}"></span>
-            ${i < stages.length - 1 ? `<span class="line" style="background:${i < at ? '#0E0E0E' : '#EDEDED'}"></span>` : ''}
-          </div>
-          <div class="timeline-body">
-            <h4 style="color:${i <= at ? '#0E0E0E' : '#8B8983'}">${st[0]}</h4>
-            <div class="when">${st[1]}</div>
-            <p>${st[2]}</p>
-          </div>
-        </div>`).join('')}
-      </div>` : ''}
-    </div>
-    <div class="track-sidebar">
-      <h3>Anything wrong with the fit?</h3>
-      <p>Fourteen days, unworn, courier included. Message the same chat and we send a collection slot — no forms, no ticket numbers.</p>
-      ${s.trackResult ? `<div style="background:#fff;padding:16px;margin-top:18px">
-        <div style="font-size:14px;color:#8B8983">Reference</div>
-        <div style="font-size:20px;font-weight:800;margin-top:2px">${s.trackResult.ref}</div>
-        <div style="font-size:14px;color:#6E6C66;margin-top:8px">${s.trackResult.items.length} pair(s) · ${R(s.trackResult.total)}</div>
-      </div>` : ''}
-      <button class="btn-full" style="margin-top:18px" onclick="go('help')">Message the shop</button>
-    </div>
-  </div>`;
-}
-
-async function lookupOrder() {
-  const ref = STATE.trackRef.trim().toUpperCase();
-  if (!ref) { STATE.trackNote = 'Enter a reference first.'; render(); return; }
-  try {
-    const res = await fetch(`/api/orders/${ref}`);
-    if (!res.ok) {
-      STATE.trackNote = 'No order under that reference yet. Check the confirmation message.';
-      STATE.trackResult = null;
-    } else {
-      STATE.trackResult = await res.json();
-      STATE.trackNote = 'Found it — status below is live.';
-    }
-  } catch {
-    STATE.trackNote = 'Could not reach the server. Try again.';
-  }
-  render();
 }
 
 function renderHelp() {
@@ -1036,75 +940,6 @@ function renderHelp() {
   </div>`;
 }
 
-function renderMembership() {
-  const s = STATE;
-  const mf = s.memberForm;
-  const isJoin = s.memberView === 'join';
-
-  if (s.memberDone) {
-    return `<div class="breadcrumb"><a onclick="go('home')">Home</a> / Membership</div>
-    <div style="max-width:560px;margin:0 auto;padding:60px 40px;text-align:center">
-      <div style="font-size:48px;margin-bottom:20px">&#10003;</div>
-      <h1 style="font-family:'Archivo Black',Archivo,sans-serif;font-size:32px;letter-spacing:-.035em;text-transform:uppercase">${isJoin ? "You're in" : 'Welcome back'}</h1>
-      <p style="margin:14px 0 30px;font-size:16px;line-height:1.6;color:#54524D">${isJoin ? 'We\'ve sent a WhatsApp to confirm your membership. You\'ll get first access to every new drop before the site goes live.' : 'We\'ve sent a WhatsApp to verify your number. You\'ll get early access to every drop.'}</p>
-      <button class="btn-full" style="width:auto;display:inline-block" onclick="go('list',{filter:'All'})">Start shopping</button>
-    </div>`;
-  }
-
-  return `<div class="breadcrumb"><a onclick="go('home')">Home</a> / ${isJoin ? 'Join' : 'Sign in'}</div>
-  <div style="max-width:480px;margin:0 auto;padding:40px">
-    <h1 class="page-title" style="padding:0;font-size:36px">${isJoin ? 'Join free' : 'Sign in'}</h1>
-    <p style="margin:10px 0 30px;font-size:15px;color:#6E6C66;line-height:1.6">${isJoin ? 'Members get first access to every drop before the site goes live. Free, no card needed.' : 'Enter the phone number you signed up with.'}</p>
-
-    <div style="display:grid;gap:14px">
-      ${isJoin ? `<label class="form-label">
-        <span>Full name</span>
-        <input id="field-mname" value="${mf.name}" placeholder="Thandi Mokoena" tabindex="1"
-          oninput="STATE.memberForm.name=this.value">
-      </label>` : ''}
-      <label class="form-label">
-        <span>Mobile number (WhatsApp)</span>
-        <input id="field-mphone" value="${mf.phone}" placeholder="065 966 2508" tabindex="2"
-          oninput="STATE.memberForm.phone=this.value">
-      </label>
-      ${isJoin ? `<label class="form-label">
-        <span>Email (optional)</span>
-        <input id="field-memail" value="${mf.email}" placeholder="thandi@email.com" tabindex="3"
-          oninput="STATE.memberForm.email=this.value">
-      </label>` : ''}
-    </div>
-
-    <button class="btn-full" style="margin-top:24px" onclick="submitMembership()">${isJoin ? 'Join Daylight' : 'Sign in'}</button>
-
-    <div style="margin-top:20px;font-size:14px;color:#6E6C66;text-align:center">
-      ${isJoin ? `Already a member? <a style="font-weight:700;text-decoration:underline;cursor:pointer" onclick="STATE.memberView='signin';render()">Sign in</a>` :
-      `Not a member yet? <a style="font-weight:700;text-decoration:underline;cursor:pointer" onclick="STATE.memberView='join';render()">Join free</a>`}
-    </div>
-  </div>`;
-}
-
-async function submitMembership() {
-  const mf = STATE.memberForm;
-  const isJoin = STATE.memberView === 'join';
-  if (isJoin && !mf.name.trim()) { flash('Enter your name'); return; }
-  if (!/[0-9]{9,}/.test(mf.phone.replace(/\D/g, ''))) { flash('Enter a valid mobile number'); return; }
-
-  try {
-    const res = await fetch('/api/members', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ name: mf.name, phone: mf.phone, email: mf.email, action: STATE.memberView })
-    });
-    const data = await res.json();
-    if (!res.ok) { flash(data.error || 'Something went wrong'); return; }
-    STATE.memberDone = true;
-    if (data.waUrl) setTimeout(() => window.open(data.waUrl, '_blank'), 500);
-    render();
-  } catch (err) {
-    flash('Network error — try again');
-  }
-}
-
 function renderFooter() {
   return `<div class="footer">
     <div class="footer-grid">
@@ -1126,13 +961,11 @@ function renderFooter() {
         <h4>Help</h4>
         <a onclick="go('help')">Size guide</a>
         <a onclick="go('help')">Delivery &amp; returns</a>
-        <a onclick="go('track')">Track my order</a>
         <a href="https://wa.me/27659662508?text=Hi%20Daylight!" target="_blank">Contact us</a>
       </div>
       <div class="footer-col">
         <h4>Daylight</h4>
         <a onclick="go('help')">About us</a>
-        <a onclick="go('membership',{memberView:'join',memberDone:false})">Join free</a>
         <a onclick="flash('@daylight.za')">Instagram</a>
         <a href="https://wa.me/27659662508?text=Hi%20Daylight!" target="_blank">WhatsApp</a>
       </div>
@@ -1211,9 +1044,7 @@ function handleHash() {
     STATE.trackRef = ref;
     go('confirm');
   }
-  else if (hash === 'track') go('track');
   else if (hash === 'help') go('help');
-  else if (hash === 'membership') go('membership');
 }
 
 // Boot
